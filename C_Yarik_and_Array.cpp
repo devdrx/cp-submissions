@@ -270,11 +270,23 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n=1,m=0;
-    string s;
+    int n;
     cin>>n;
-    vi v(n);
-    cin>>v;
+    vector<int> v(n);
+    for(int i=0;i<n;i++){
+        cin>>v[i];
+    }
+    int ans = INT_MIN;
+    int sum = 0;
+    for(int i=0;i<n;i++){
+        sum += v[i];
+        ans = max(ans,sum);
+        if(i!=n-1 && abs(v[i])%2==abs(v[i+1])%2){
+            sum = 0;
+        }
+        if(sum<0) sum=0;
+    }
+    cout<<ans<<endl;
     
 }
 

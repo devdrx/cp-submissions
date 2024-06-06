@@ -268,26 +268,40 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
+vector<int> divisors(int n){
+    vector<int> div;
+    for(int i = 1; i*i <= n; ++i){
+        if(n%i==0) div.push_back(i);
+        if(i != n/i && n%i==0) div.push_back(n/i);
+    }
+    return div;
+}
 
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
+    int n=1;
+    cin>>n;
+    vi v(n);
+    cin>>v;
+    int c = 0;
+    int ans = 0;
+    vi d = divisors(n);
+    for(auto i : d){
+        int mini = 1e18;
+        int maxi = 0;
+        int sum = 0;
+        for(int j = 0; j<n; j++){ //to calculate min and max in all such containers possible
+            sum+=v[j];
+            c++;
+            if(c==i){
+                mini= min(mini,sum);
+                maxi = max(maxi,sum);
+                c=0;
+                sum=0;
+            } 
+        }
+        ans = max(ans, maxi-mini); //max difference in all such containers
     }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
-    }
-    cout << min(ans, closertoa + closertob ) << endl;
-    
+    cout << ans << endl;
 }
 
 int32_t main()

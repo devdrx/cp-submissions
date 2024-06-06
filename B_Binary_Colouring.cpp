@@ -268,26 +268,49 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
-
+string DecimalToBinary(int num)
+{
+    string str;
+      while(num){
+      if(num & 1) // 1
+        str+='1';
+      else // 0
+        str+='0';
+      num>>=1; // Right Shift by 1  
+    }    
+      return str;
+}
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
+    int x;
+    cin >> x;
+ 
+    vector<int> a;
+    while (x != 0) {
+        a.push_back(x % 2);
+        x /= 2;
     }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
+    int n = a.size();
+    for (int i = 0; i < n - 1; ++i) {
+        if (a[i] == 1 && a[i + 1] == 1) {
+            a[i] = -1;
+            int j = i + 1;
+            while (j < n && a[j] == 1) {
+                a[j] = 0;
+                j++;
+            }
+            if (j == n) {
+                a.push_back(1);
+            } else {
+                a[j] = 1;
+            }
+        }
     }
-    cout << min(ans, closertoa + closertob ) << endl;
-    
+ 
+    cout << a.size() << endl;
+    for (int i = 0; i < a.size(); ++i) {
+        cout << a[i] << " ";
+    }
+    cout << endl;
 }
 
 int32_t main()

@@ -270,23 +270,11 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
-    }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
-    }
-    cout << min(ans, closertoa + closertob ) << endl;
+    int n=1,m=0;
+    string s;
+    cin>>n;
+    vi v(n);
+    cin>>v;
     
 }
 

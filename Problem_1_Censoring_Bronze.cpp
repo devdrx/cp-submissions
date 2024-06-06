@@ -270,23 +270,21 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
+    string s;
+    cin >> s;
+    string t;
+    cin >> t;
+    int n = s.length();
+    int n1 = t.length();
+    string ans; int i = 0;
+    for(int i = 0; i < n; i++){
+        ans+=s[i]; //add character one by one
+        if (ans.size() > n1 && ans.substr(ans.size() - n1) == t)  //gives substring after index ans.size()-n1
+        {
+            ans.resize(ans.size() - n1); //resize the string to remove the last n1 characters
+        }
     }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
-    }
-    cout << min(ans, closertoa + closertob ) << endl;
+    cout << ans;
     
 }
 
@@ -297,7 +295,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

@@ -275,18 +275,32 @@ void solve(){
     vi v(n);
     vi a(n);
     cin >> v;
-    a=v;
+    a=v; //copy vector a
     srt(v);
-    vi pf(n);
-    pf[0]=v[0];
+    vi pref(n);
+    pref[0]=v[0];
     for(int i=1;i<n;i++){
-        pf[i]=pf[i-1]+v[i];
+        pref[i]=pref[i-1]+v[i];
     }
     map<int,int> mp;
 
-    for(int i = 0; i < n; i++){
-        int it
+    for(int i = n-1; i >= 0; i--){
+        if(i==n-1){
+            mp[v[i]] = i; //we can get all the elements with largest val
+        }
+        else{
+            if(pref[i]>=v[i+1]){
+                mp[v[i]] = mp[v[i+1]]; //check Xournal for explanation
+            }
+            else{
+                mp[v[i]] = i;
+            }
+        }
     }
+    fr(i, n){
+        cout << mp[a[i]] << " ";
+    }
+    nl;
 
 }
 

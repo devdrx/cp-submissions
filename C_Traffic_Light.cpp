@@ -281,7 +281,7 @@ void solve(){
         return;
     }
     s+=s;
-    cout << s << endl;
+    // cout << s << endl;
     vi greenindices;
     for(int i = 0; i < 2*n; i++){
         if(s[i]=='g'){
@@ -289,14 +289,23 @@ void solve(){
             if(i>=n) break;
         }
     }
-    cout << greenindices << endl;
-    vi ans;
-    for(auto x : greenindices){
-        for(int i = n; i>=0; i--){
-            if(s[i]==indicator) {ans.push_back(x-i); break;}
+    vi indices;
+    for(int i = 0; i<n ; i++){
+        if(s[i]==indicator){
+            indices.push_back(i);
         }
     }
-    cout << *min_element(ans.begin(), ans.end()) << endl;
+    vi ans;
+    for(int i = 0; i < indices.size(); i++){
+        for(auto x: greenindices){
+            if(x>indices[i]){
+                ans.push_back(x-indices[i]);
+                break;
+            }
+        }
+    }
+    cout << *max_element(ans.begin(), ans.end()) << endl;
+    
 }
 
 int32_t main()

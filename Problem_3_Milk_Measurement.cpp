@@ -270,24 +270,29 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
+    int n;
+    cin >> n;
+    vector <pair<int, pair<string, int>>> v(n);
+    int milk[3] = {7, 7, 7};
+    for(int i = 0; i < n; i++){
+        int d;
+        string s, t;
+        int x;
+        cin >> d >> s >> t;
+        string temp = t.substr(1, t.size()-1);
+        if(t[0]=='+'){
+            x = stoi(temp);
+        }
+        else{
+            x = -stoi(temp);
+        }
+        v[i] = {d, {s, x}};
     }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
+    sort(v.begin(), v.end());
+
+    for(auto x: v){
+        cout<< x.first<<" "<<x.second.first<<" "<<x.second.second;nl;
     }
-    cout << min(ans, closertoa + closertob ) << endl;
-    
 }
 
 int32_t main()
@@ -297,7 +302,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

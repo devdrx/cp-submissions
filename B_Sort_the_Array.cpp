@@ -113,115 +113,6 @@ bool isPrime(int n){
 
 /// ====================================PRIME utility ENDS here==================================================
 
-template<class T, class U>
-// T -> node, U->update.
-struct Lsegtree{
-    vector<T>st;
-    vector<U>lazy;
-    int n;
-    T identity_element;
-    U identity_update;
-
-    /*
-        Definition of identity_element: the element I such that combine(x,I) = x
-        for all x
-
-        Definition of identity_update: the element I such that apply(x,I) = x
-        for all x        
-    */
-
-    Lsegtree(int n, T identity_element, U identity_update){
-        this->n = n;
-        this->identity_element = identity_element;
-        this->identity_update = identity_update;
-        st.assign(4*n,identity_element);
-        lazy.assign(4*n, identity_update);
-    }
-
-    T combine(T l, T r){
-        // change this function as required.
-        T ans = (l + r);
-        return ans;
-    }
-
-    void buildUtil(int v, int tl, int tr, vector<T>&a){
-        if(tl == tr){
-            st[v] = a[tl];
-            return;
-        }
-        int tm = (tl + tr)>>1;
-        buildUtil(2*v + 1, tl, tm,a);
-        buildUtil(2*v + 2,tm+1,tr,a);
-        st[v] = combine(st[2*v + 1], st[2*v + 2]);
-    }
-
-    // change the following 2 functions, and you're more or less done.
-    T apply(T curr, U upd, int tl, int tr){
-        T ans = (tr-tl+1)*upd;
-        // increment range by upd:
-        // T ans = curr + (tr - tl + 1)*upd
-        return ans;
-    }
-
-    U combineUpdate(U old_upd, U new_upd, int tl, int tr){
-        U ans = old_upd;
-        ans=new_upd;
-        return ans;
-    }  
-
-    void push_down(int v, int tl, int tr){
-        //for the below line to work, make sure the "==" operator is defined for U.
-        if(lazy[v] == identity_update)return;
-        st[v] = apply(st[v], lazy[v], tl, tr);
-        if(2*v + 1 <= 4*n){
-            int tm = (tl + tr)>>1;
-            lazy[2*v + 1] = combineUpdate(lazy[2*v+1], lazy[v], tl, tm);
-            lazy[2*v + 2] = combineUpdate(lazy[2*v+2], lazy[v], tm+1,tr);            
-        }
-        lazy[v] = identity_update;
-    }
-
-    T queryUtil(int v, int tl, int tr, int l, int r){
-        push_down(v,tl,tr);
-        if(l > r)return identity_element;
-        if(tr < l or tl > r){
-            return identity_element;
-        }
-        if(l <= tl and r >= tr){
-            return st[v];
-        }
-        int tm = (tl + tr)>>1;
-        return combine(queryUtil(2*v+1,tl,tm,l,r), queryUtil(2*v+2,tm+1,tr,l,r));
-    }
- 
-    void updateUtil(int v, int tl, int tr, int l, int r, U upd){
-        push_down(v,tl,tr); 
-        if(tr < l or tl > r)return;
-        if(tl >=l and tr <=r){
-            lazy[v] = combineUpdate(lazy[v],upd,tl,tr);
-            push_down(v,tl,tr);
-        } else{
-            int tm = (tl + tr)>>1;
-            updateUtil(2*v+1,tl,tm,l,r,upd);
-            updateUtil(2*v+2,tm+1,tr,l,r,upd);
-            st[v] = combine(st[2*v + 1], st[2*v+2]);
-        }
-    }
-
-    void build(vector<T>a){
-        assert( (int)a.size() == n);
-        buildUtil(0,0,n-1,a);
-    }
-
-    T query(int l, int r){
-        return queryUtil(0,0,n-1,l,r);
-    }
-
-    void update(int l,int r, U upd){
-        updateUtil(0,0,n-1,l,r,upd);
-    }
-};
-
 // ========================================MATH UTIL BEGINS==============================================
 //==================================== compute higher powers with mod ===================================
 uint power(int x, int y, int p =  MOD)
@@ -270,24 +161,103 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
-    }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
-    }
-    cout << min(ans, closertoa + closertob ) << endl;
-    
+    // int n;
+    // cin>>n;
+    // vi v(n);
+    // cin>>v;
+    // vi a = v;
+    // int f = 0;
+    // for(int i = 0; i < n; i++){
+    //     if(v[i]!=i+1){
+    //         f = 1;
+    //         break;
+    //     }
+    // }
+    // if(f==0){
+    //     cout<<"yes\n1 1\n";
+    //     return;
+    // }
+    // vector<pair<int,int>> pp(n);
+    // fr(i,n){
+    //     pp[i].first = v[i];
+    //     pp[i].second = i+1;
+    // }
+    // sort(all(pp));
+    // //check if array a and array pp.second is equal or not
+    // fr(i,n){
+    //     if(a[i]!=pp[i].second){
+    //         cout<<"no\n";
+    //         return;
+    //     }
+    // }
+    // cout << "yes\n";
+    // int l = 1, r = n;
+    // for(int i = 0; i < n; i++){
+    //     //find the first index of a[i] where a[i] != i+1
+    //     if(a[i]==i+1) l++;
+    //     else{
+    //         l = i+1;break;
+    //     }
+    // }
+    // for(int i = n-1; i >= 0; i--){
+    //     //find the first index of a[i] where a[i] != i+1
+    //     if(a[i]==i+1) r--;
+    //     else{
+    //         r = i+1;break;
+    //     }
+    // }
+    // cout << l << " " << r << endl;
+
+    //my assumption that the array was actually a permutation was incorrect
+    //instead made the array a permutation and work on it as usual
+    int n;
+	cin >> n;
+    int a[n], b[n];
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+		b[i] = a[i];
+	}
+	map<int, int> mp;
+	sort(b, b + n);
+	for (int i = 0; i < n; i++) {
+		mp[b[i]] = i;
+	}
+	for (int i = 0; i < n; i++) {
+		a[i] = mp[a[i]]; //giving a_i their permutation based values
+	}
+    //continue as usual
+	int L = -1;
+	for (int i = 0; i < n; i++) {
+		if (a[i] != i) {
+			L = i;
+			break;
+		}
+	}
+	int R = -1;
+	for (int i = n - 1; i >= 0; i--) {
+		if (a[i] != i) {
+			R = i;
+			break;
+		}
+	}
+	if (L == -1 || R == -1) {
+		cout << "yes" << endl;
+		cout << 1 << " " << 1 << endl;
+	} else {
+		reverse(a + L, a + R + 1);
+		int ok = true;
+		for (int i = 0; i < n; i++) {
+			if (a[i] != i) {
+				ok = false;
+			}
+		}
+		if (ok) {
+			cout << "yes" << endl;
+			cout << L + 1 << " " << R + 1 << endl;
+		} else {
+			cout << "no" << endl;
+		}
+	}
 }
 
 int32_t main()
@@ -297,7 +267,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

@@ -274,18 +274,33 @@ void solve(){
     cin >> n >> x;
     vi a(n);
     cin >> a;
-    int high = a[0], low = a[0];
+    vi l, r;
+    for(int i=0;i<n;i++){
+        l.push_back(a[i]-x);
+        r.push_back(a[i]+x);
+    }
+    // cout << l << endl;
+    // cout << r << endl;
     int ans = 0;
-    for(int i = 1; i < n; i++){
-        if(abs(a[i]-a[i-1])<=2*x){
-            ans++;
-            continue;
+    for(int i =0; i < n-1; i++){
+        int ao=l[i+1], bo=r[i+1];
+        // cout << l[i+1] << " " << r[i+1] << endl;
+        // cout << l[i] << " " << r[i] << endl;
+        if(l[i+1]<l[i]){
+            l[i+1] = l[i];    //updating range
         }
-        else{
-            int diff = abs(a[i]-a[i-1]);
-            
+        if(r[i+1]>r[i]){
+            r[i+1] = r[i];    //updating range
+        }
+        // cout << l[i+1] << " " << r[i+1] << endl;
+        // cout << l[i] << " " << r[i] << endl;
+        if(l[i+1]>r[i+1]){    //if range is shrunk and not just out of bounds
+            ans++;
+            l[i+1] = ao;      //restore to original
+            r[i+1] = bo;
         }
     }
+    cout << ans << endl;
 }
 
 int32_t main()

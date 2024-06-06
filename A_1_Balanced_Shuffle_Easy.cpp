@@ -270,23 +270,26 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, k, a, b;
-    cin >> n >> k >> a >> b;
-    vector<pair<int,int>> v;
-    fr(i,n){
-        int x, y;
-        cin >> x >> y;
-        v.push_back({x,y});
+    string s;
+    cin >> s;
+    map <int, vector<int>> mp;
+    mp[0].push_back(0); //init
+    int n = s.length();
+    int bal = 0;
+    fr(i,n-1){
+        if(s[i]=='('){
+            bal++;
+        }
+        else{
+            bal--;
+        }
+        mp[bal].push_back(i+1);
     }
-    int ans = abs(v[a-1].first - v[b-1].first) + abs(v[a-1].second - v[b-1].second); //at max this is the answer
-    int closertoa = 10e9, closertob =10e9;
-    fr(i,k){
-        int t1 = abs(v[i].first - v[a-1].first) + abs(v[i].second - v[a-1].second);
-        int t2 = abs(v[i].first - v[b-1].first) + abs(v[i].second - v[b-1].second);
-        closertoa = min(closertoa, t1);
-        closertob = min(closertob, t2);
+    for(auto x:mp){   //reverse print of mp vecs inorder
+        for(int i = x.second.size()-1; i>=0; i--){
+            cout<<s[x.second[i]];
+        }
     }
-    cout << min(ans, closertoa + closertob ) << endl;
     
 }
 
@@ -297,7 +300,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
