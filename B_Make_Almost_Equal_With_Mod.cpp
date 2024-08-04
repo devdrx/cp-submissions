@@ -268,48 +268,21 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
-int mostFrequentDifference(const std::vector<int>& nums) {
-    std::multiset<int> differences;
 
-    // Iterate through all pairs of indices (i, j) where i < j
-    for (int i = 0; i < nums.size(); ++i) {
-        for (int j = i + 1; j < nums.size(); ++j) {
-            differences.insert(nums[j] - nums[i]);
-        }
-    }
-
-    for(auto x : differences){
-        cout << x << " ";
-    }
-    cout << endl;
-
-    // Count the occurrences of each difference
-    std::unordered_map<int, int> count;
-    for (int diff : differences) {
-        count[diff]++;
-    }
-
-    // Find the value with the highest occurrence
-    int mostFrequentValue = -1;
-    int maxOccurrences = 0;
-    for (const auto& entry : count) {
-        if (entry.second > maxOccurrences) {
-            mostFrequentValue = entry.first;
-            maxOccurrences = entry.second;
-        }
-    }
-
-    return mostFrequentValue;
-}
 
 void solve(){
-    int n=1,m=0;
-    string s;
-    cin>>n;
-    vi v(n);
-    cin>>v;
-    sort(v.begin(),v.end());
-    cout << mostFrequentDifference(v) << endl;
+    int n; cin >> n; int res = 2;
+    vi a(n); cin >> a;
+    while(1) {
+            set < int > rem;
+            for(int i = 0 ; i < (int)a.size() ; i++) {
+                rem.insert(a[i]%res);
+            }
+            if((int)rem.size() == 2)
+                break;
+            res *= 2;
+        }
+    cout<<res<<endl;
     
 }
 

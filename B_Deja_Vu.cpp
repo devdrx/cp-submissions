@@ -270,11 +270,28 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n=1,m=0;
-    string s;
-    cin>>n;
+    int n,q;
+    cin>>n>>q;
     vi v(n);
     cin>>v;
+    vi qu(q);
+    cin>>qu; vi st;
+    fr(i,q){
+        if(find(all(st),qu[i])==st.end()){
+            st.push_back(qu[i]);
+        }
+    }
+    for(auto x:st){
+        fr(i,n){
+            if(v[i]%(1<<x)==0){
+                v[i]+=(1<<(x-1));
+            }
+        }
+    }
+    for(auto x:v){
+        cout<<x<<" ";
+    }
+    nl;
     
 }
 
