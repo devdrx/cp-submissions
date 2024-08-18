@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,31 +106,38 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
+    int n, m, ans = 0, cnt = 0;
+    cin >> n >> m;
     vi a(n);
     cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
+    sort(all(a),greater<int>());
     for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
+        int diff = abs(a[i] - a[i-1]);
+        if(diff <= m){
+            a[i] += diff;
+            m -= diff;
+        }
+        else{
+            a[i] += m;
+            m = 0;
             break;
         }
-        achieve += a[i];
+        i++;
     }
-    if(!f){
-        cout << "YES\n";
+    // cout << a << endl;
+    int alice = 0, bob = 0;
+    for(int i = 0; i < n; i++){
+        if(i%2 == 0)    alice += a[i];
+        else    bob += a[i];
     }
-    else{
-        cout << "NO\n";
-    }
+    cout << alice - bob << endl;
     
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()

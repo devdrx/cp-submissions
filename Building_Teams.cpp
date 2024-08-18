@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -103,34 +103,62 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+int n,m;
+vector<vi> g;
+vector<bool> vis;
+vi color;
 
 
+bool dfs(int u, int c){
+    // vis[u] = true;
+    color[u] = c;
+    for(auto v : g[u]){
+        // if(v == par) continue;
+        if(color[v] == 0){
+            if(!dfs(v, (color[u]^3)))
+                return false;
+        }
+        if(color[v] == color[u]) 
+            return false;
+    }
+    return true;
+}
+
+bool colorc(){
+    for(int i = 1; i <= n; i++){
+        if(!vis[i]){
+            if(!dfs(i, 1)) 
+                return false;
+        }
+    }
+    return true;
+}
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
+    cin >> n >> m;
+    g.resize(n+1);
+    vis.resize(n+1);
+    color.resize(n+1);
+    fr(i,m){
+        int u,v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    if(!colorc()){
+        cout << "IMPOSSIBLE";
         return;
     }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
+    rep(i,1,n){
+        cout << color[i] << " ";
     }
     
+    
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()
@@ -140,7 +168,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

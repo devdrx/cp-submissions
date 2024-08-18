@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -103,34 +103,47 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+int n, m, ans = 0, cnt = 0;
+vector<vi> g;
+vector<bool> vis;
+vector<int> par;
+//bfs function
 
+
+void bfs(){
+    queue<int> q;
+    q.push(1);
+    vis[1] = 1;
+    while(!q.empty()){
+        int u = q.front();
+        q.pop();
+        for(auto v: g[u]){
+            if(!vis[v]){
+                vis[v] = 1;
+                par[v] = u;
+                q.push(v);
+            }
+        }
+    }
+}   
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
+    cin >> n >> m;
+    g.resize(n+1);
+    fr(i,m){
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
     }
     
+    
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()

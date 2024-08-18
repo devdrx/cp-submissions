@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -103,34 +103,56 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+vector<vi> g;
+vector<int> city;
+vi vis;
 
+void dfs(int u){
+    vis[u] = 1;
+    for(auto v: g[u]){
+        if(!vis[v]){
+            dfs(v);
+        }
+    }
+}
+
+int connected_components(){
+    int cnt = 0;
+    for(int i = 1; i < (int)g.size(); i++){ // Start from 1 if the graph is 1-indexed
+        if(!vis[i]){
+            dfs(i);
+            city.push_back(i);
+            cnt++;
+        }
+    }
+    return cnt;
+}
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
+    int n, m;
+    cin >> n >> m;
+
+    g.resize(n + 1); // Resizing for 1-indexed graph
+    vis.resize(n + 1, 0);
+
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
     }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+
+    int numComponents = connected_components();
+
+    if(numComponents > 1){
+        cout << numComponents - 1 << "\n";
+        for(int i = 1; i < (int)city.size(); i++){
+            cout << city[i-1] << " " << city[i] << "\n";
         }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
     }
     else{
-        cout << "NO\n";
+        cout << 0;
     }
-    
 }
 
 int32_t main()
@@ -140,7 +162,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

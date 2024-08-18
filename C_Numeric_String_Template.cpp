@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -77,6 +77,7 @@ uint power(int x, int y, int p =  MOD)
     return res;
 }
 
+
 // =============================================================================================================
 
 uint modInverse(int n, int p=MOD)       // using fermats little thm. [p needs to be prime which is mostly the case as mod value generally is 1e9+7]
@@ -108,29 +109,56 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n;
     cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
     }
     
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; ++i) {
+        string s;
+        cin >> s;
+        
+        if (s.size() != n) {
+            cout << "NO\n";
+            continue;
+        }
+        
+        map<int, char> intToChar;
+        map<char, int> charToInt;
+        bool isMatch = true;
+        
+        for (int j = 0; j < n; ++j) {
+            int num = a[j];
+            char ch = s[j];
+            
+            if (intToChar.count(num)) {
+                if (intToChar[num] != ch) {
+                    isMatch = false;
+                    break;
+                }
+            } else {
+                intToChar[num] = ch;
+            }
+            
+            if (charToInt.count(ch)) {
+                if (charToInt[ch] != num) {
+                    isMatch = false;
+                    break;
+                }
+            } else {
+                charToInt[ch] = num;
+            }
+        }
+        
+        if (isMatch) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+    dont use a fucking um
 }
 
 int32_t main()

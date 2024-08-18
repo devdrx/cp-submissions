@@ -104,33 +104,43 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
+vector<int> calculateContributions1(int n, int m, int k) {
+    vector<vector<int>> contrib(n, vector<int>(m, 0));
+    vector<int> contribCount;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int horizontalContrib = max(0ll, min(i, n - k) - max(i - k + 1, 0ll) + 1);
+            int verticalContrib = max(0ll, min(j, m - k) - max(j - k + 1, 0ll) + 1);
+            int totalContrib = horizontalContrib * verticalContrib;
+            
+            contrib[i][j] = totalContrib;
+            
+            // Store the contribution in the map
+            contribCount.push_back(totalContrib);
+        }
+    }
+
+    return contribCount;
+
+}
+
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
+    int n,m,k; cin >> n >> m >> k;
+    
+    vi mp = calculateContributions1(n, m, k);
+    sort(all(mp),greater<int>());
+    int w; cin >> w;
+    vi a(w);
     cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
+    sort(all(a),greater<int>());
+    int ans = 0;
+    for(int i = 0; i < w; i++){
+        ans += mp[i]*a[i];
     }
     
+    cout << ans << endl;
 }
 
 int32_t main()

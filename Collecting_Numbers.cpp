@@ -162,8 +162,19 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 void solve(){
     int n; cin >> n;
-    //4 2 1 5 3
-    //1 2 3 4 5
+    vector<pair<int,int>> a(n+1);
+    a[0] = {0,0};
+    int ans  = 1;
+    for(int i = 1; i<=n; i++){
+        cin >> a[i].first;
+        a[i].second = i;
+    }
+    sort(a.begin(),a.end());
+    for(int i = 1; i <=n; i++){
+        if(a[i].second < a[i-1].second) ans++;
+    }
+
+    cout << ans <<endl;
     
 }
 

@@ -106,30 +106,54 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
+    int n; 
     cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
     }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
+    
+    string s;
+    cin >> s;
+
+    // Compute the prefix sum array
+    vector<int> pref(n);
+    pref[0] = a[0];
+    for (int i = 1; i < n; i++) {
+        pref[i] = pref[i - 1] + a[i];
+    }
+
+    int ans = 0;
+    int l = 0, r = n - 1;
+
+    while (l < r) {
+        // Find the position of leftmost 'L' character in the string
+        while (l < n && s[l] != 'L') {
+            l++;
+        }
+
+        // Find the position of rightmost 'R' character in the string
+        while (r >= 0 && s[r] != 'R') {
+            r--;
+        }
+
+        // If valid pair found
+        if (l < r) {
+            if (l == 0) {
+                ans += pref[r];
+            } else {
+                ans += pref[r] - pref[l - 1];
+            }
+            l++;
+            r--;
+        } else {
             break;
         }
-        achieve += a[i];
     }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
-    }
+    
+    cout << ans << '\n';
+
+
     
 }
 

@@ -106,30 +106,19 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    int xc, yc, k;
+        cin >> xc >> yc >> k; 
+        
+        for (int i = -k/2; i < 0; ++i) {
+            cout << xc + i << " " << yc << endl; 
         }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
-    }
+        for (int i = 1; i <= k/2; ++i) {
+            cout << xc + i << " " << yc << endl; 
+        }
+        if(k%2) {
+            cout << xc << " " << yc << endl; 
+        }
+        
     
 }
 

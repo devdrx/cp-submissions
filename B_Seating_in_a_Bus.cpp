@@ -110,21 +110,22 @@ void solve(){
     cin >> n;
     vi a(n);
     cin >> a;
-    srt(a);
-    int achieve = 1;
+    set<int> s;
+    s.insert(a[0]);
     int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
     for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
+        if(s.find(a[i]-1) != s.end()){
+            s.insert(a[i]);
+        }
+        else if(s.find(a[i]+1) != s.end()){
+            s.insert(a[i]);
+        }
+        else{
             f = 1;
             break;
         }
-        achieve += a[i];
     }
-    if(!f){
+    if(f==0){
         cout << "YES\n";
     }
     else{

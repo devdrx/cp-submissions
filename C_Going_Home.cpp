@@ -105,29 +105,32 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 // ==================================== MATH UTIL ENDS=======================================================//
  
 
-void solve(){
-    int n,m; string s;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    vector<int,pair<int,int>> mp(2e6+5,{-1,-1});
-    for(int i=0; i<n; i++){
-        for(int j=i+1; j<n; j++){
-            int temp = a[i]+a[j];
-            if(mp[temp].first!=-1){
-                int x = mp[temp].first;
-                int y = mp[temp].second;
-                if(x!=i && x!=j && y!=i && y!=j){
+const int N= 5000005;
+int a[N],x[N],y[N];
+void solve() 
+{
+    int i,j,n,m;
+    cin >> n;       
+    rep(i,1,n)
+        cin>> a[i];
+    rep(i,1,n){
+        rep(j,i+1,n){
+            int r= a[i]+a[j];
+            if(x[r]){
+                if(i!=x[r]&&i!=y[r]&&j!=x[r]&&j!=y[r]){
                     cout<<"YES\n";
-                    cout<<x+1<<" "<<y+1<<" "<<i+1<<" "<<j+1; nl; return;
+                    cout<<i<<' '<<j<<' '<<x[r]<<' '<<y[r]<<'\n';
+                    return;
                 }
+            }else{
+                x[r]= i;
+                y[r]= j;
             }
-            mp[temp] = {i,j};
         }
     }
-    cout << "NO\n";
-
-
+    cout<<"NO\n";
+    
+    
 }
 
 int32_t main()

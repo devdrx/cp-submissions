@@ -108,20 +108,27 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n,m;
     cin>>n>>m;
-    vector<vi > cnt(n+1);
+    vector<int > v(n);
+    for(int i = 0; i < n; i++) v[i] = n;
+    //store leftmost bhai
     for(int i = 0; i < m; i++){
         int x,y;
         cin >> x >> y;
-        cnt[x].push_back(y);
-        cnt[y].push_back(x); 
+        if(x>y) swap(x,y);
+        v[x-1] = min(v[x-1],y-1);
+    }
+    for(int i = n-2; i >= 0; i--){
+        v[i] = min(v[i],v[i+1]);
     }
     int ans = 0;
-    for(int i = n; i>=0; i--){
-        srt(cnt[i]);
-        //now find the first dude that's your friend
-        
+    // cout << v << endl;
+    for(int i = 0; i < n; i++){
+        ans += (v[i] - i);
     }
-    cout<<ans; nl;
+
+    cout << ans; nl;
+
+    
     
 }
 

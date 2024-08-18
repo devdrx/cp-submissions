@@ -110,26 +110,19 @@ void solve(){
     cin >> n;
     vi a(n);
     cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
+    //max prefix array
+    vi maxpref(n);
+    maxpref[0]=a[0];
+    for(int i=1;i<n;i++){
+        maxpref[i]=max(maxpref[i-1],a[i]);
     }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
+    int ans = 0;
+    int maxi = 0;
+    for(int i = 0; i < n; i++){
+        ans += maxpref[i]-a[i];
+        maxi = max(maxi,maxpref[i]-a[i]);
     }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
-    }
+    cout << ans+ maxi<< endl;
     
 }
 

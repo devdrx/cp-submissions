@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,31 +106,37 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
+    int n, m, cnt = 0;
     cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
+    
+    vi a(n); cin >> a;
+    int aand = accumulate(all(a),a[0], bit_and<int>());
+
+    if(aand != 0){
+        cout<<1; nl;
     }
     else{
-        cout << "NO\n";
+        int ans = 0;
+        int x = a[0];
+        for(int i = 1; i < n; i++){
+            if(x == aand){
+                ans++;
+                x = a[i];
+            }
+            x = x & a[i];
+        }
+        //last check
+        if(x == aand){
+            ans++;
+        }
+        cout << ans << endl;
     }
-    
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()

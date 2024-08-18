@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -103,34 +103,63 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+int n,m, rooms;
+
+vector<vector<bool>> vis;
+vector<pair<int,int>> moves = {{0,1},{0,-1},{1,0},{-1,0}};
+
+bool isValid(int x, int y){
+    if(x<0 || y<0 || x>=n || y>=m) return false;
+    if(vis[x][y]) return false;
+    return true;
+}
 
 
-void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+void dfs(int i, int j){
+    vis[i][j] = true;
+    for(auto x: moves)
+    {
+        if(isValid(i+x.first, j+x.second)){
+            dfs(i+x.first, j+x.second);
         }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
     }
     
+}
+void connected_components(){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(!vis[i][j]){
+                dfs(i,j);
+                rooms++;
+            }
+        }
+    }
+}
+
+void solve(){
+    cin >> n >> m;
+    vis.resize(n);
+
+    for(int i=0;i<n;i++){
+        vis[i].resize(m);
+    }
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            char c;
+            cin >> c;
+            if(c == '#') vis[i][j] = true;
+        }
+    }
+    
+    connected_components();
+    cout << rooms;
+    nl;
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()
@@ -140,7 +169,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

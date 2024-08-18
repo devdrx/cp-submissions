@@ -106,30 +106,39 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
+    int n,m;
     cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    vi a(n); cin >> a;
+    vi ans(n);
+    set<int> s; //used nums
+    int mex1 = 0, mex2 = 1;
+    fr(i,n){
+        if(s.count(mex1 - a[i]) || (mex1 - a[i])< 0){
+            ans[i] = mex2 - a[i];
         }
-        achieve += a[i];
+        else{
+            ans[i] = mex1 - a[i];
+        }
+        if(ans[i] == mex1){ //if we ended up using mex1
+            mex1 = mex2;
+            mex2++;
+            while(s.count(mex2)){
+                mex2++;
+            }
+        } 
+        else if(ans[i] == mex2){ //if we ended up using mex2
+            mex2++;
+            while(s.count(mex2)){
+                mex2++;
+            }
+        }
+        s.insert(ans[i]); // this cant be used anymore in the permutation
     }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
-    }
+
+    cout << ans;
+
+    nl;
+
     
 }
 

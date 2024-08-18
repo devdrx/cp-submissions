@@ -106,29 +106,35 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    string s;
+    cin >> s;
+    int n = s.length();
+    //check if first two digits of num is 10
+    //s is a number of any digits
+
+    if(s[0]=='1' and s[1]=='0'){
+        //convert string to integer 
+        int num = 0;
+        for(int i=2;i<n;i++){
+            num = num*10 + (s[i]-'0');
         }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
+        //store number of digits in num in x
+        int x = 0;
+        int temp = num;
+        while(temp){
+            temp/=10;
+            x++;
+        }
+        if(num>=2 and x==n-2){
+            cout << "YES";nl;
+        }
+        else{
+            cout << "NO";nl;
+        }
+        
     }
     else{
-        cout << "NO\n";
+    cout << "NO";nl;
     }
     
 }

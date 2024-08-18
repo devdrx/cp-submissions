@@ -106,29 +106,27 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    int n,m; cin >> n >> m;
+    vector<string> v(n);
+    cin >> v;
+    //check for patterns of 2x2 where there is only one zero in the 2x2 square
+    int ans=0;
+    for(int i=0;i<n-1;i++){
+        for(int j=0;j<m-1;j++){
+            int cnt=0;
+            for(int k=0;k<2;k++){
+                for(int l=0;l<2;l++){
+                    if(v[i+k][j+l]=='0')    cnt++;
+                }
+            }
+            if(cnt==1)  ans++;
         }
-        achieve += a[i];
     }
-    if(!f){
-        cout << "YES\n";
+    if(ans > 0){
+        cout << "NO\n";
     }
     else{
-        cout << "NO\n";
+        cout << "YES\n";
     }
     
 }

@@ -106,31 +106,33 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
+    int n, k;
+    cin >> n >> k;
+    vector<pair<int,int>> a(n);
+    for(int i = 0; i < n; i++){
+        cin >> a[i].first;
+    }
+    for(int i = 0; i < n; i++){
+        cin >> a[i].second;
+    }
     srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    int ans = 0;
+    if(n%2){
+        for(int i = 0; i < n; i++){
+            if(a[i].second==1){
+                a[i].first += k;
+            }
         }
-        achieve += a[i];
+        for(int i = 0; i < n; i++){
+            if(i == ((n+1)/2 - 1)){
+                ans = max(ans, a[i].first + a[i-1].first - (((a[i].second)&(a[i-1].second))?k:0));
+            }
+            else{
+                ans = max(ans, a[i].first + a[(n+1)/2 - 1].first - (((a[i].second)&(a[(n+1)/2 - 1].second))?k:0));
+            }
+        }
     }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
-    }
-    
+    cout << ans << endl;
 }
 
 int32_t main()

@@ -103,33 +103,33 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
+void oper(char &c, int change){
+    c = char('0' + (c - '0' + change)%3);
+}
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
+    int n,m; cin >> n >> m;
+    vector<string> a(n);
+    vector<string> b(n);
     cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    cin >> b;
+    for(int i = 0; i < n-1; i++){
+        for(int j = 0; j < m-1; j++){
+            while(a[i][j]!=b[i][j]){
+                oper(a[i][j],1);
+                oper(a[i+1][j],2);
+                oper(a[i+1][j+1],1);
+                oper(a[i][j+1],2);
+            }
         }
-        achieve += a[i];
     }
-    if(!f){
+    if(a==b){
         cout << "YES\n";
     }
     else{
         cout << "NO\n";
     }
+
     
 }
 

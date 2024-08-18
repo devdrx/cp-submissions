@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,31 +106,48 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
+    int n,x; 
+    cin >> n >> x; 
+    vi a(n); cin >> a; 
+    vi b(n); cin >> b;
+    
+    vector<pair<int,int>> v;
+    fr(i,n) v.push_back({a[i],i});
+
+    srt(v);
+    srt(b);
+
+    vi bmod(n);
+    int f = 1;
+    //ai > bi
+    //for the x largest elements in a, we place the smallest x elements from b
+    for(int i = x; i>0; i--){
+        //for that index in a, which is n-xth largest, we place the x-i th largest element from b
+        bmod[v[n-i].second] = b[x-i];
+        f &= (bmod[v[n-i].second] < a[v[n-i].second]);
     }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
+    //for the smaller values of a, we give them large values of b such ai <= bi
+    int j = 0;
+    for(int i = x+1; i<=n; i++){
+        bmod[v[j].second] = b[x+j];
+        f &= (bmod[v[j].second] >= a[v[j].second]);
+        j++;
     }
-    if(!f){
+
+    if(f){
         cout << "YES\n";
+        cout << bmod; nl;
     }
     else{
         cout << "NO\n";
     }
     
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()

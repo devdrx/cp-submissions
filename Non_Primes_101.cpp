@@ -103,33 +103,61 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
+set<int> primes;
+    
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
-        return;
-    }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
+    
+
+        int n;
+        cin >> n;
+        vector<int> A(n);
+
+        for (int i = 0; i < n; ++i) {
+            cin >> A[i];
         }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
-    }
+
+        set<int> odd;
+        set<int> even;
+        set<int> one;
+        for (int i = 0; i < n; ++i) {
+            if (A[i] % 2 == 1) {
+                if(A[i]!=1)
+                    odd.insert(i+1);
+                else{
+                    one.insert(i+1);
+                }
+            }
+            else {
+                even.insert(i+1);
+            }
+        }
+        if(n < 4){
+            //brute for all sums of i and j
+            for(int i = 0; i < n; i++){
+                for(int j = i+1; j < n; j++){
+                    if(primes.count(A[i] + A[j])==0){
+                        cout << i+1 << " " << j+1 << endl;
+                        return;
+                    }
+                }
+            }
+            cout << -1 << endl;
+            return;
+        }
+        if(odd.size() >= 2){
+            cout << *odd.begin() << " " << *next(odd.begin()) << endl;
+            return;
+        }
+        if(even.size() >= 2){
+            cout << *even.begin() << " " << *next(even.begin()) << endl;
+            return;
+        }
+        if(odd.size()>=1 and one.size()>=1){
+            cout << *odd.begin() << " " << *one.begin() << endl;
+            return;
+        }
+        cout << -1 << endl;
     
 }
 
@@ -141,6 +169,11 @@ int32_t main()
 
     int T = 1;
     cin >> T;
+    for (int i = 2; i <= 200; ++i) {
+        if (isPrime(i)) {
+            primes.insert(i);
+        }
+    }
     while (T--)
     {
         solve();

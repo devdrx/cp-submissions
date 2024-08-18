@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,31 +106,54 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi a(n);
-    cin >> a;
-    srt(a);
-    int achieve = 1;
-    int f = 0;
-    if(a[0] > 1){
-        cout << "NO\n";
+    int l, r, L, R;
+    int ans = 0;
+    vi pos(101, 0);
+    cin >> l >> r >> L >> R;
+    
+    //if no intersection
+    if (L > r || l > R) {
+        cout << 1 << endl;
         return;
     }
-    for(int i = 1; i < n; i++){
-        if(a[i] > achieve){
-            f = 1;
-            break;
-        }
-        achieve += a[i];
-    }
-    if(!f){
-        cout << "YES\n";
-    }
-    else{
-        cout << "NO\n";
+    
+    if (L < l) {
+        swap(l, L);
+        swap(r, R);
     }
     
+    
+    for (int i = l; i <= r; i++) {
+        pos[i]++;
+    }
+    
+    for (int i = L; i <= R; i++) {
+        pos[i]++;
+    }
+    
+    int real = -1;
+    int rear = -1;
+    // cout << pos << endl;
+    for (int i = 1; i <= 100; i++) {
+        if (pos[i] == 2){ 
+            ans++;
+            if (real == -1) {
+                real = i;
+            }
+            rear = i;
+        }
+    }
+    ans--;
+    // cout << real << " " << rear << endl;
+    if (min(min(l, r), min(L, R)) < real) ans++;
+    if (max(max(l, r), max(L, R)) > rear) ans++;
+    
+    cout << ans << endl;
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()
