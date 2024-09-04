@@ -108,6 +108,18 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n, m, ans = 0, cnt = 0;
     cin >> n;
+    vi dp(n+1,1e9);
+    dp[0] = 0;
+    //dp[i] is the minimum no of steps to convert i to 0
+
+    for(int i = 1; i <=n ; i++){
+        string s = to_string(i);
+        for(auto c : s){
+            if(c-'0'>=0)
+            dp[i] = min(dp[i], dp[i-(c-'0')]+1);
+        }
+    }
+    cout << dp[n] << endl;
     
     
 
@@ -125,7 +137,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

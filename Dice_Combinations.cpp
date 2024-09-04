@@ -108,7 +108,16 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n, m, ans = 0, cnt = 0;
     cin >> n;
-    
+    vi dp(n+2,0);
+    dp[0] = 1; //one way to get 1
+    for(int i=1; i <= n; i++){
+        for(int j=1; j<=6; j++){
+            if(j<=i){
+                dp[i] = (dp[i] + dp[i-j])%MOD;
+            }
+        }
+    }
+    cout << dp[n] << endl;
     
 
     //noum
@@ -125,7 +134,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

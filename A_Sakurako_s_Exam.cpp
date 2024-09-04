@@ -106,16 +106,29 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
-    
-    
+    int a,b; cin >> a >> b;
+
+    if(a%2==1){
+        cout << "NO\n";
+    }
+    else{
+        if(b%2==0){
+            cout << "YES\n";
+        }
+        else{
+            if(a==0){
+            cout << "NO\n";
+            }
+            else{
+                cout << "YES\n";
+            }
+        }
+    }
 
     //noum
     //i{}el{}ord
     //cCas
     //tleopt
-
 }
 
 int32_t main()

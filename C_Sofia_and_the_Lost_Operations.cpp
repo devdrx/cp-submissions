@@ -106,10 +106,27 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
+    int n;
     cin >> n;
-    
-    
+    map<int, int> mpd; 
+    vi a(n), b(n);
+    cin >> a >> b;
+    int m; cin >> m; vi d(m);
+    for(int i = 0; i < m; i++){
+        cin >> d[i];
+        mpd[d[i]]++;
+    }
+    for(int i = 0; i < n; i++){
+        if(a[i]!=b[i]){
+            if(!mpd[b[i]]){
+                cout << "NO" << endl;
+                return;
+            }
+            mpd[b[i]]--;
+        }
+    }
+    if(find(all(b), d[m-1]) != b.end()) cout << "YES" << endl;
+    else cout << "NO" << endl;
 
     //noum
     //i{}el{}ord

@@ -106,8 +106,14 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
+    int n; string s;
     cin >> n;
+    cin >> s;
+    if(s[0]==s[n-1]){
+        cout << "NO\n";
+        return;
+    }
+    cout << "YES\n";
     
     
 

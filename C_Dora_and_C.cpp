@@ -106,9 +106,20 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
-    
+    int n, a ,b, ans = 0, cnt = 0;
+    cin >> n >> a >> b;
+    int g = __gcd(a,b);
+    vi v(n);
+    for(int i = 0; i < n; i++){
+        cin >> v[i];
+        v[i] %= g;
+    }
+    srt(v);
+    int range = v[n-1] - v[0];
+    for(int i  = 1; i < n; i++ ){
+        range = min(range, v[i-1]+g-v[i]); //IMPORTANT
+    }
+    cout << range; nl;
     
 
     //noum

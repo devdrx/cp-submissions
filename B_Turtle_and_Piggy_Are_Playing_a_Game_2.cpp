@@ -109,8 +109,13 @@ void solve(){
     int n, m, ans = 0, cnt = 0;
     cin >> n;
     
+    vi a(n);
+    cin >> a;
     
-
+    srt(a);
+    // cout << (n+1)/2 << endl;
+    cout << a[n/2] << endl;
+    
     //noum
     //i{}el{}ord
     //cCas

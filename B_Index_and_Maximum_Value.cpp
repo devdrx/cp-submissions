@@ -107,9 +107,29 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 void solve(){
     int n, m, ans = 0, cnt = 0;
-    cin >> n;
+    cin >> n >> m;
     
-    
+    vi a(n);
+    cin >> a;
+
+    int maxi = *max_element(all(a));
+    while(m--){
+        char op; int l, r;
+        cin >> op >> l >> r;
+        if(op == '+'){
+            if(maxi <= r and maxi >= l){
+                maxi++;
+            }
+        }
+        else{
+            if(maxi <= r and maxi >= l){
+                maxi--;
+            }
+        }
+        cout << maxi << " ";
+    }
+
+    nl;
 
     //noum
     //i{}el{}ord

@@ -106,10 +106,30 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
+    int n, x;
+    cin >> n >> x;
+    vi v(n);
+    vi w(n);
+    cin >> w >> v;
+    // vector<vector<int>> dp(n+1, vector<int>(x+1, 0));
+    vi prev(x+1, 0);
+    // dp[i][j] = max pages that can be bought with first i books and j money
+
+    for(int i = 1; i <= n; i++){
+        vi curr(x+1);
+        for(int j = 0; j <= x; j++){
+            int weight = w[i-1];
+            int value = v[i-1];
+
+            int pick = (j >= weight ? prev[j-weight] + value : 0);
+            int skip = prev[j];
+
+            curr[j] = max(pick, skip);
+        }
+        prev = curr;
+    }
     
-    
+    cout << prev[x] << endl;
 
     //noum
     //i{}el{}ord
@@ -125,7 +145,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

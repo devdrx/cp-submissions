@@ -106,8 +106,30 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
+    int n, m, cnt = 0;
     cin >> n;
+    vi q(n-1); cin >> q;
+    vi p(n,0);
+    p[0] = 0;
+    for(int i = 1; i < n; i++){
+        p[i] = p[i-1] + q[i-1];
+    }
+    int mn = *min_element(all(p));
+    int x = 1 - mn;
+    for(int i = 0; i < n; i++){
+        p[i] += x;
+    }
+    vi ans = p;
+    //check if permutation
+    srt(p);
+    for(int i = 0; i < n; i++){
+        if(p[i] != i+1){
+            cout << -1;
+            return;
+        }
+    }
+    cout << ans;
+
     
     
 
@@ -125,7 +147,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

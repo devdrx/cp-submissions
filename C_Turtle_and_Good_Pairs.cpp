@@ -106,10 +106,35 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
+    int n;
     cin >> n;
+    string s;
+    cin >> s;
     
+    map<char, int> freq;
+    for (char c : s) {
+        freq[c]++;
+    }
     
+    vector<pair<int, char>> mp;
+    for (auto it : freq) {
+        mp.push_back({it.second, it.first});
+    }
+    
+    sort(mp.rbegin(), mp.rend());
+    
+    string result(n, ' ');
+    int index = 0;
+    
+    for (auto &p : mp) {
+        for (int i = 0; i < p.first; i++) {
+            if (index >= n) index = 1;
+            result[index] = p.second;
+            index += 2;
+        }
+    }
+    
+    cout << result << endl;
 
     //noum
     //i{}el{}ord

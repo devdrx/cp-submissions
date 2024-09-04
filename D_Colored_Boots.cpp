@@ -106,9 +106,60 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
+    int n, m, cnt = 0;
     cin >> n;
-    
+    string s1, s2;
+    cin >> s1 >> s2;
+    //storing indexes of all these characters.
+    vvi ls(26);
+    vi lq;
+    vvi rs(26);
+    vi rq;
+    fr(i,n){
+        if(s1[i]=='?')  lq.push_back(i);
+        else    ls[s1[i]-'a'].push_back(i);
+        if(s2[i]=='?')  rq.push_back(i);
+        else    rs[s2[i]-'a'].push_back(i);
+    }
+    vi cntl(26), cntr(26);
+    vector<pair<int,int>> ans;
+
+    //pairing same letters together
+    for(int i = 0; i < 26; i++){
+        for(int j = 0; j < min(ls[i].size(), rs[i].size()); j++){
+            ans.push_back({ls[i][j] + 1, rs[i][j] + 1});
+        }
+        cntl[i] = min(ls[i].size(), rs[i].size()); //how many pairs created
+        cntr[i] = cntl[i];
+    }
+
+    //pairing letters in right with '?'
+    for(int i = 0; i < 26; i++){
+        while(cntr[i] < rs[i].size() && lq.size() > 0){
+            ans.push_back({lq.back() + 1, rs[i][cntr[i]] + 1});
+            cntr[i]++;
+            lq.pop_back();
+        }
+    }
+    //pairing letters in left with '?'
+    for(int i = 0; i < 26; i++){
+        while(cntl[i] < ls[i].size() && rq.size() > 0){
+            ans.push_back({ls[i][cntl[i]] + 1, rq.back() + 1});
+            cntl[i]++;
+            rq.pop_back();
+        }
+    }
+    //pairing '?' with '?'
+    while(lq.size() > 0 && rq.size() > 0){
+        ans.push_back({lq.back() + 1, rq.back() + 1});
+        lq.pop_back();
+        rq.pop_back();
+    }
+    cout << ans.size() << endl;
+    for(auto x: ans){
+        cout << x.first << " " << x.second << endl;
+    }
+
     
 
     //noum
@@ -125,7 +176,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

@@ -108,8 +108,24 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n, m, ans = 0, cnt = 0;
     cin >> n;
-    
-    
+    vi a(n); cin >> a;
+    map<int,int> mp;
+    for(int i = 0; i < n; i++){
+        mp[a[i]]++;
+    }
+    for(auto x: mp){
+        int num = x.second;
+        if(num >=3){
+            ans += (num*(num-1)*(num-2))/6; //nC3
+        }
+        if(num >= 2){
+            ans += (num*(num-1)*cnt)/2; //nC2
+        }
+        cnt+=num;
+    }
+    cout << ans;
+    nl;
+
 
     //noum
     //i{}el{}ord

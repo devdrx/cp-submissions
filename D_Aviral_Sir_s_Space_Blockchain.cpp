@@ -109,8 +109,18 @@ void solve(){
     int n, m, ans = 0, cnt = 0;
     cin >> n;
     
-    
+    vi a(n);
+    cin >> a;
 
+    for(int i = 0; i < n; i++){
+        if(a[i]%2==0){
+            cout << a[i]-1 << " ";
+        }
+        else{
+            cout << a[i] << " ";
+        }
+    }
+    cout << endl;
     //noum
     //i{}el{}ord
     //cCas

@@ -103,12 +103,44 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+int countSubarrays(vector<int> arr, int k)
+{
+    int n = arr.size();
+    int count = 0;
+    int sum = 0;
+    map<int, int> mp;
+    for (int i = 0; i < n; i++)
+    {
+        sum += arr[i];
+        if (sum == k)
+            count++;
+        if (mp.find(sum - k) != mp.end())
+            count += mp[sum - k];
+        mp[sum]++;
+    }
+    return count;
+}
+
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
-    
+    int n, k, ans = 0, cnt = 0;
+    cin >> n >> k;
+
+    vi a(n);
+    cin >> a;
+
+    vi b(n,0);
+
+    for(int i = 0; i < n; i++){
+        int x = sqrt(a[i]);
+        if(a[i] == x*x){
+            b[i] = 1;
+        }
+
+    }
+
+    cout << countSubarrays(b, k); nl;
     
 
     //noum

@@ -106,10 +106,72 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
+    int n;
     cin >> n;
+    string s[n];
+    fr(i,n) cin >> s[i];
+
+    // vector<vector<int>> dp(n, vector<int>(n));
+    vector<int> next(n);
+
+    // if(s[n-1][n-1]=='.'){
+    //     dp[n-1][n-1] = 1;
+    // }
+    // else{
+    //     dp[n-1][n-1] = 0;
+    // }
     
+    if(s[n-1][n-1]=='*'){
+        next[n-1] = 0;
+    }
+    else{
+        next[n-1] = 1;
+    }
+
+    //initializing the last row dp
+    for(int i = n-2; i>=0; i--){
+        if(s[n-1][i]=='*'){
+            next[i] = 0;
+        }
+        else{
+            next[i] = next[i+1];
+        }
+    }
+
+
+
+    // for(int i = n-1; i >= 0; i--){
+    //     for(int j = n-1; j>=0; j--){
+    //         if(i==n-1 && j==n-1) continue; //last cell
+    //         if(s[i][j]=='*'){
+    //             dp[i][j] = 0;
+    //         }
+    //         else{
+    //             int right = (j==n-1)?0:dp[i][j+1];
+    //             int down = (i==n-1)?0:dp[i+1][j];
+
+    //             dp[i][j] = (right+down)%MOD;
+    //         }
+    //     }
+    // }
+
+    for(int i = n-2; i >= 0; i--){
+        vi curr(n);
+        for(int j = n-1; j >= 0; j--){
+            if(s[i][j]=='*'){
+                curr[j] = 0;
+            }
+            else{
+                int right = (j==n-1)?0:curr[j+1];
+                int down = next[j];
+
+                curr[j] = (right+down)%MOD;
+            }
+        }
+        next = curr;
+    }
     
+    cout << next[0] << endl;
 
     //noum
     //i{}el{}ord
@@ -125,7 +187,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

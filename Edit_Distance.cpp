@@ -106,16 +106,24 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
-    
-    
+    string s1, s2; cin >> s1 >> s2;
+    int n = s1.size(), m = s2.size();
 
-    //noum
-    //i{}el{}ord
-    //cCas
-    //tleopt
+    vi curr(m+1);
+    fr(i,m+1) curr[i] = i;
 
+    for(int i = 1; i <= n; i++){
+        vi next(m+1, 1e6);
+        next[0] = i;
+        for(int j = 1; j <= m; j++){
+            char x = s1[i-1], y = s2[j-1];
+
+            if(x==y) next[j] = curr[j-1];
+            else next[j] = min({curr[j-1], curr[j], next[j-1]}) + 1;
+        }
+        curr = next;
+    }
+    cout << curr[m];
 }
 
 int32_t main()
@@ -125,7 +133,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

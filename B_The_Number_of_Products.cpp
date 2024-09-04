@@ -104,11 +104,29 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
-
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
-    
+    int n;
+    cin>>n;
+    int x[n];
+    for(int i=0;i<n;i++) cin>>x[i];
+    int dp[n+1][2]={0};
+    for(int i=0;i<n;i++){
+        if(x[i]>0){
+            dp[i+1][0]=dp[i][0]+1;
+            dp[i+1][1]=dp[i][1];
+        }
+        else{
+            dp[i+1][0]=dp[i][1];
+            dp[i+1][1]=dp[i][0]+1;
+        }
+    }
+    for(int i=1;i<=n;i++){
+        dp[i][0]+=dp[i-1][0];
+        dp[i][1]+=dp[i-1][1];
+    }
+    cout<<dp[n][1]<<" "<<dp[n][0];
+
+
     
 
     //noum
@@ -125,7 +143,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

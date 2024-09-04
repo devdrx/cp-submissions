@@ -17,7 +17,7 @@
 // make sure to sort before applying unique // else only consecutive duplicates would be removed 
 #define bin(x,y)  bitset<y>(x) 
 using namespace std;
-int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
+const int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
 
 const int MX_SZ=1e5+5;
 int par[MX_SZ];
@@ -106,10 +106,38 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, m, ans = 0, cnt = 0;
-    cin >> n;
+    int n, x, ans = 0, cnt = 0;
+    cin >> n >> x;
     
-    
+    vi coins(n);
+    cin >> coins;
+    // vvi dp(n+1,vi(x+1));
+    // fr(i,n){ dp[i][0] = 1;} //dp[i][k] = number of ways to make sum k using only all the i+1 to n coins
+
+    // for(int i = n-1; i >=0; i--){
+    //     dp[i][0] = 1;
+    // }
+    //in this dp when filling the table we are only using the previous row [i+1] to build up the current row [i] hence just two arrays of size x+1 are enough and we can keep updating them, there are n rows btw
+    vector<int> next(x+1,0); //next is dp[i+1][sum]
+    next[0] = 1; //base case
+
+    for(int i = n-1; i>=0; i--){
+        vi curr(x+1, 0);
+        curr[0]=1;  //base case
+        //checking for all the sums possible
+        for(int sum = 1; sum <= x; sum++){
+            int nextcoin = next[sum];
+            int cur = 0;
+            if(coins[i]<=sum){
+                cur = curr[sum-coins[i]];
+            }
+            curr[sum] = (nextcoin+cur)%MOD;
+        }
+        //now update the next to the current one (we are doing top down)
+        next = curr;
+    }
+
+    cout << next[x] << endl;
 
     //noum
     //i{}el{}ord
@@ -125,7 +153,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

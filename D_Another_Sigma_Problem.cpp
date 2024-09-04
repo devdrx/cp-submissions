@@ -17,7 +17,7 @@
 // make sure to sort before applying unique // else only consecutive duplicates would be removed 
 #define bin(x,y)  bitset<y>(x) 
 using namespace std;
-int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
+int MOD=998244353;      // Hardcoded, directly change from here for functions!
 
 const int MX_SZ=1e5+5;
 int par[MX_SZ];
@@ -108,8 +108,25 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n, m, ans = 0, cnt = 0;
     cin >> n;
+    vi a(n); cin >> a;
+    reverse(all(a));
     
-    
+    int ans = 0;
+    int pp = 0;
+    int cnt = n-1;
+
+    for(auto x: a){
+        ans += cnt*x;
+        ans += pp*x;
+        int v = 1;
+        cnt--;
+        while(v<=x){
+            v*=10;
+        }
+        pp+=v; pp%=MOD;
+        ans%=MOD;
+    }
+    cout << ans << endl;
 
     //noum
     //i{}el{}ord
@@ -125,7 +142,6 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
     while (T--)
     {
         solve();

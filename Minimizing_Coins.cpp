@@ -107,10 +107,24 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 void solve(){
     int n, m, ans = 0, cnt = 0;
-    cin >> n;
-    
-    
+    cin >> n >> m;
+    vi coins(n);
+    cin >> coins;
+    vi dp(m+1,INT_MAX); //dp[i] stores the minimum number of coins required to make sum i
 
+    dp[0] = 0; //0 coins to make 0
+
+    for(int i = 1; i <= m; i++){
+        for(int j = 0; j < n; j++){
+            if(coins[j]<=i){
+                dp[i] = min(dp[i], dp[i-coins[j]]+1);
+            }
+        }
+    }
+    
+    if(dp[m]==INT_MAX) cout << -1;
+    else cout << dp[m];
+    
     //noum
     //i{}el{}ord
     //cCas
@@ -125,7 +139,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
