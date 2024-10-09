@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -107,36 +107,24 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 void solve(){
     int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
+    cin>>n;
+    vector<int> app(n);
+    cin >> app;
+    vector<int> dish(n);
+    cin >> dish;
+    srt(app);
+    srt(dish);
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
+    int ans=0;
+    for(int i=0;i<n;i++){        
+        int temp = 2e9;
+        for(int j=0;j<n;j++){
+            temp = min(temp,abs(app[j]-dish[j]));
+        }
+        ans=max(ans,temp);
+        rotate(dish.begin(),dish.begin()+1,dish.end());
     }
-    nl;
-
+    cout<<ans<<endl;
 
 }
 
@@ -154,3 +142,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

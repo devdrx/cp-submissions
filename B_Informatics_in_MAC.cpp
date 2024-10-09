@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,50 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
+    int n; cin >> n; 
+    vi a(n); cin >> a;
+
+    int mex = 0;
+    vi freq(n + 1, 0);
+    fr(i, n) freq[a[i]]++;
+    while (mex <= n && freq[mex] > 0) mex++;
+
+    if(mex == 0){
+        cout << "2\n";
+        cout << "1 1\n";
+        cout << "2 "<< n << "\n";
+        return;
     }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+    map<int,int> mp;
+    int left=0;
+    vector<pair<int,int>>ans;
+    for(int i=0;i<n;i++){
+        if(a[i]<mex){
+            mp[a[i]]=1;
+        }
+        if(mp.size()==mex){
+            ans.push_back({left+1,i+1});
+            left=i+1;
+            mp.clear();
         }
     }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
+    ans[ans.size()-1].second=n;
+    if(ans.size()<2){
+        cout<<"-1\n";
+    }
+    else{
+        cout<<ans.size()<<"\n";
+        for(int i=0;i<ans.size();i++){
+            cout<<ans[i].first<<" "<<ans[i].second<<"\n";
         }
     }
+    
+    
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
-
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +167,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

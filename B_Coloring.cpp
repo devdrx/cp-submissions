@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,41 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+    int n, m, k , ans = 0, cnt = 0;
+    cin >> n >> m >> k;
+
+    vi a(m);
+    cin >> a;
+
+    int grp = n/k; //number of grps
+    int xs = n%k; //excess
+
+    int pp = 0;
+
+    for(int i = 0; i < m; i++){
+        if(a[i]>grp+1){
+            cnt = 1;  //invalid case
         }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
+        if(a[i]==grp+1){ //only this kind of color is allowed to stay in the last grp of size xs
+            pp++;
         }
     }
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
+    if(cnt){
+        cout << "NO" << endl;
     }
-    nl;
+    else if(pp>xs){
+        cout << "NO" << endl;
+    }
+    else cout << "YES" << endl;
 
+
+    
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +158,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

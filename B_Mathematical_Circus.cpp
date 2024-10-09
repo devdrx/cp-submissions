@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,28 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
+    int n, k, ans = 0, cnt = 0;
+    cin >> n >> k;
+    if(k%4==0){
+        cout << "NO" << endl;
+        return;
     }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+    cout << "YES" << endl;
+    for(int i = 1; i <= n; i+=2){
+        if(((i+k)*(i+1))%4==0){
+            cout << i << " " << i + 1 << endl;
+        }
+        else{
+            cout << i + 1 << " " << i << endl;
         }
     }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
+    
+    
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
-
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +145,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

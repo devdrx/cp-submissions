@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,52 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+        int b;
+        cin >> b;
+
+        vector<int> c(b);
+        for (auto& d : c) {
+            cin >> d;
         }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
+
+        sort(c.begin(), c.end());
+
+        vector<pair<int, int>> e;
+        for (size_t f = 0; f < c.size() - 1; ++f) {
+            int g = c[f + 1] - c[f] + 1;
+            int h = c[f + 1] + c[f] - 1;
+
+            e.emplace_back(g, 1);
+            e.emplace_back(h + 1, -1);
+        }
+
+        sort(e.begin(), e.end());
+        int i = 0;
+        int j = -1;
+        int k = 0;
+
+        for (const auto& l : e) {
+            int m = l.first;
+            int n = l.second;
+
+            if (j != -1 && i > 0) {
+                k += (m - j);
             }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
+
+            i += n;
+            j = m;
         }
-    }
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
+        cout << k << endl;
+    
+    // count the number of distinct integers between consecutive elements in a sorted array by generating intervals (start and end points) from the differences between consecutive elements, then uses a sweep line algorithm to track and sum the unique values within active intervals.
+    
 
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +169,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

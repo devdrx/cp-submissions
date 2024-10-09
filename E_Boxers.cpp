@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,9 +106,65 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    double x = 1e-5;
-    cout << fixed << setprecision(10) << x << endl; 
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    map<int,int> mp;
+    for(int i=0;i<n;i++){
+        cin>>v[i];
+        mp[v[i]]++;
+    }
+    set<int> s;
+    for(auto x : mp){
+        if(x.first == 1){
+            if(x.second == 1){
+                s.insert(1);
+            }
+            else{
+                s.insert(1);
+                s.insert(2);
+            }
+        }
+        else if(x.second == 1){
+            if(!s.count(x.first-1)){
+                s.insert(x.first-1);
+            }
+            else if(!s.count(x.first)){
+                s.insert(x.first);
+            }
+            else{
+                s.insert(x.first+1);
+            }
+        }
+        else if(x.second == 2){
+            if(!s.count(x.first-1)){
+                s.insert(x.first-1);
+                if(!s.count(x.first)){
+                    s.insert(x.first);
+                }
+                else{
+                    s.insert(x.first+1);
+                }
+            }
+            else if(!s.count(x.first)){
+                s.insert(x.first);
+                s.insert(x.first+1);
+            }
+            else{
+                s.insert(x.first+1);
+            }
+        }
+        else{
+            s.insert(x.first-1);
+            s.insert(x.first);
+            s.insert(x.first+1);
+        }
+        
+    }
+    cout << s.size() << endl; 
+
 }
+
 
 int32_t main()
 {
@@ -117,7 +173,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

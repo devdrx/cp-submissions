@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,24 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
+    int n, k; 
+    cin>>n>>k;
+    vi a(n+1),b(n+1);
+	int flag=1;
+	for(int i=1;i<=n;i++)cin>>a[i],b[i]=a[i];
+	srt(b);
+	for(int i=n-k+1;i<=k;i++){
+		if(a[i]==b[i])continue;
+		flag=0;
+	}
+	if(flag)cout<<"YES\n";
+    else cout<<"NO\n";
+    
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
-
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +141,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

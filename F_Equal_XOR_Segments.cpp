@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,44 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
+    int n, q, ans = 0, cnt = 0;
+    cin >> n >> q;
+    vi a(n); cin >> a;
+    vi pref(n+1,0);
+    fr(i,n) pref[i+1] = pref[i]^a[i];
+    map<int,vi> mp;
+    fr(i,n+1) mp[pref[i]].push_back(i);
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
+    while(q--){
+        int l, r;
+        cin >> l >> r;
+
+        if(pref[l-1] == pref[r]){
+            cout << "YES\n";
+        }
+        else{
+            auto idx = lower_bound(mp[pref[r]].begin(), mp[pref[r]].end(), l);
+            if(idx != mp[pref[r]].end() && *idx < r-1){
+                auto idx2 = lower_bound(mp[pref[l-1]].begin(), mp[pref[l-1]].end(), (*idx));
+                if(idx2!=mp[pref[l-1]].end() && (*idx2) < r){
+                    cout << "YES\n";
+                }
+                else{
+                    cout << "NO\n";
+                }
+            }
+            else{
+                cout << "NO\n";
+            }
+        }
     }
+    
     nl;
 
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +161,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

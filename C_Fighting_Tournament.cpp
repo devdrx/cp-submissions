@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,69 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
+    int n,q;
+    cin>>n>>q;
+    vector<int> a(n);
+    for(int i=0;i<n;i++)
+    {
+        cin>>a[i];
     }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
+ 
+    vector<int> winner;
+    int mx=a[0];
+    for(int i=1;i<n;i++)
+    {
+        mx=max(mx,a[i]);
+        winner.push_back(mx);
     }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+ 
+    map<int,pair<int,int>> mp;
+    for(int i=0;i<winner.size();i++)
+    {
+        int j=i;
+        while(j<winner.size() && winner[j]==winner[i])
+        {
+            j++;
+        }
+        mp[winner[i]]={i,j-1};
+        i=j-1;
+    }
+ 
+    while(q--){
+        int x,y;
+        cin>>x>>y;
+        x--;
+        int player=a[x];
+        if(mp.find(player)==mp.end()){
+            cout<<0<<endl;
+            continue;
+        }
+        if(player==mx){
+            if(x==0)x++;
+            cout<<max(y-x+1,0LL)<<endl;
+            continue;
+        }
+        int l=mp[player].first;
+        int r=mp[player].second;
+        l++;
+        r++;
+        if(y>r){
+            cout<<r-l+1<<endl;
+        }
+        else if(y<l){
+            cout<<0<<endl;
+        }
+        else{
+            cout<<y-l+1<<endl;
         }
     }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
+    
+    
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
-
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +186,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

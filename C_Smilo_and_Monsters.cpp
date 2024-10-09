@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -107,36 +107,72 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 void solve(){
     int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
+    cin>>n;
+    vi v(n);
+    cin >> v;
+    srt(v);
+    
+    int l = 0;
+    int r = n-1;
+    int ans = 0;
+    int sum = 0;
+    while(l<=r){
+        if(l==r){
+            if(sum==0){
+                if(v[l]==1){
+                    ans++;
+                    break;
+                }
+                if(v[l]%2==0){
+                    ans += v[l]/2 + 1;
+                }
+                else ans += v[l]/2 + 2;
             }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
+            else{
+                if(sum<v[l]){
+                    int diff = v[l] - sum;
+                    if(diff%2==0){
+                        ans += diff/2 + 1;
+                    }
+                    else{
+                        ans += diff/2 + 2;
+                    }
+                }
+                else{
+                    ans++;
+                }
+ 
+            }
+            break;
+        }
+        sum += v[l];
+        if(sum==v[r]){
+            ans += v[l] + 1;
+            l++; r--;
+            sum = 0;
+        }
+        else if(sum>v[r]){
+            sum -= v[l];
+            v[l] = sum + v[l] - v[r];
+            ans += (v[r] - sum + 1);
+            sum = 0;
+            r--;
+        }
+        else{
+            ans += v[l];
+            l++;
         }
     }
+    cout<<ans<<endl;
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
 
+
+
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +190,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

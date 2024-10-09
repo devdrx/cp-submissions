@@ -8,8 +8,8 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
-#define all(v) v.begin(),v.end()
+#define dbg(var) cerr<<#var<<"="<<var<<" "
+#define aint(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
 #define mne(v)  *min_element(v.begin(),v.end())     // find min element in vector
@@ -79,7 +79,7 @@ uint power(int x, int y, int p =  MOD)
 
 // =============================================================================================================
 
-uint modInverse(int n, int p=MOD)       // using fermats little thm. [p needs to be prime which is mostly the case as mod value generally is 1e9+7]
+uint modInverse(int n, int p=MOD)       // using fermats little thm. [p needs to be prime which is mostly the case as mod value generainty is 1e9+7]
 {
     return power(n, p - 2, p);
 }
@@ -106,37 +106,34 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+    int n; cin>>n;
+    vector<int> a(n);
+    for(auto &x:a) cin>>x;
+    set<int> st;
+    int curxor=0, mx=0;
+    for(int i=0;i<n;i++){
+        if(i==0){
+            curxor^=a[i];
+            st.insert(curxor);
+            mx = curxor;
         }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
+        else{
+            curxor^=a[i];
+            mx = max(mx, curxor);
+            for(auto x:st){
+                mx = max(curxor^x, mx);
+ 
             }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
+            st.insert(curxor);
         }
+ 
     }
+    cout<<mx<<endl;
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
-
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +151,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

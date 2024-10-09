@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -103,40 +103,51 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
+string s;
+int n, q, x;
+char c;
+bool ok(long long x)
+{
+	if (x<0 || x>n)
+		return false;
+	else
+		return (s[x] == 'a' && s[x + 1] == 'b' && s[x + 2] == 'c');
+}
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
+    cin >> n >> q;
+	cin >> s;
+	long long ans = 0;
+	for (long long i = 0; i + 2 < s.size(); i++)
+	{
+		if (s[i] == 'a' && s[i+1] == 'b' && s[i + 2] == 'c')
+			ans++;
+	}
+	while (q--)
+	{
+		cin >> x >> c;
+        //remove all abc occurence count in current check area
+		for (long long i = x-3; i < x; i++)
+		{
+			if (ok(i))
+				ans--;
+		}
+		s[x - 1] = c;
+        //calculate it again
+		for (long long i = x-3; i < x; i++)
+		{
+			if (ok(i))
+				ans++;
+		}
+		cout << ans << endl;
+	}
+    
+    
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
-
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -147,10 +158,12 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
     }
     return 0;
 }
+
+    

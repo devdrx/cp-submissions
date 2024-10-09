@@ -117,12 +117,12 @@ void solve(){
             a[i].push_back(x);
         }
     }
-
+    //map stores the count of all the bits in all the numbers in the array
     for(auto &num: a){
         int f = 1;
 
         for(auto &x : num){
-            if(mp[x]==1){
+            if(mp[x]==1){ //if the count of the bit is 1 for the number, then it is unique
                 f = 0;
                 break;
             }

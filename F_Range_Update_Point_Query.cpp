@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -104,39 +104,61 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
+int faac(int n){
+    int ans = 0;
+    while(n){
+        ans += n%10;
+        n/=10;
+    }
+    return ans;
+}
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
-
+    int n, q;
+    cin >> n >> q;
+    vi v(n+1);
     rep(i,1,n){
-        cout<<ans[i]<<" ";
+        cin >> v[i];
     }
-    nl;
+    set<int> largidx;
+    rep(i,1,n){
+        if(v[i]/10)
+            largidx.insert(i);
+    }
+    // largidx.insert(MOD);
 
+    while(q--){
+        int t, l, r;
+        cin >> t;
+        if(t==1){
+            cin >> l >> r;
+            // l--; r--;
+            int temp = l;
+            while(largidx.size()>0){
+                auto it = largidx.lower_bound(temp); 
+                if(it==largidx.end() || *it>r){ //couldnt find or out of range
+                    break;
+                }
+                v[*it] = faac(v[*it]);
+                int xx = *it;
+                largidx.erase(it);
+                if(v[xx]>9){
+                    largidx.insert(xx); //can be calculated again
+                }
+                temp = xx+1;
+            }
+        }
+        else{
+            cin >> l;
+            cout << v[l] << endl;
+        }
+
+    }
+    
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +176,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

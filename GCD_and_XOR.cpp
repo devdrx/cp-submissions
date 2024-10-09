@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -106,37 +106,55 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+    int n, k; cin >> n >> k;
+        set<int> s;
+        vector<int> a(n); 
+        for(int i = 0; i < n; i++) {
+            cin >> a[i];
+            s.insert(a[i]);
         }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
+        int f1 = 0;
+
+        //calc gcd
+        int g = a[0];
+        for(int i = 0; i < n; i++) {
+            g = __gcd(a[i], g);
+            if(a[i] != a[0]) {
+                f1 = 1;
             }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
         }
-    }
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
-    }
-    nl;
+        int f2 = 0; 
+        vector<int> idx;
+        
+        if(s.size() == 2 && s.find(k) != s.end()) {
+            for(int i = 0; i < n; i++) {
+                if(a[i] != k) idx.push_back(i);
+            }
+            for(int i = 0; i < idx.size() - 1; i++) {
+                if(idx[i + 1] - idx[i] != 1) {
+                    cout << 2 << endl;
+                    return;
+                }
+            }
+            cout << 1 << endl;
+            return;
+        }
+        if(f1 == 0 && a[0] == k) {
+            cout << 0 << endl;
+        } else if(g % k == 0 or f1 == 0) {
+            cout << 1 << endl;
+        } else {
+            cout << 2 << endl;
+        }
+        
+    
+    
 
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +172,5 @@ int32_t main()
     }
     return 0;
 }
+
+    

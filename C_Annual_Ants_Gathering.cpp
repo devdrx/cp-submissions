@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -108,35 +108,58 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 void solve(){
     int n;
     cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
+
+    // If there's only one house, the answer is trivially "YES"
+    if (n == 1) {
+        cout << "YES" << endl;
+        return;
     }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
+
+    // Adjacency list to store the tree
+    vector<vector<int>> tree(n + 1);
+    vector<int> degree(n + 1, 0);  // to store the degree of each node
+
+    // Reading the tree edges
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        tree[u].push_back(v);
+        tree[v].push_back(u);
+        degree[u]++;
+        degree[v]++;
     }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+
+    // Queue to process the leaf nodes (nodes with degree 1)
+    queue<int> q;
+    for (int i = 1; i <= n; i++) {
+        if (degree[i] == 1) {
+            q.push(i);
         }
     }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
+
+    // Process leaf nodes and reduce the tree
+    int remainingNodes = n;  // Start with all nodes
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+
+        remainingNodes--;
+
+        // For each neighbor of the node
+        for (int neighbor : tree[node]) {
+            degree[neighbor]--;
+            if (degree[neighbor] == 1) {
+                q.push(neighbor);  // It becomes a new leaf node
             }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
         }
     }
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
+    // If there's only one node remaining, it's possible to gather all ants
+    if (remainingNodes == 1) {
+        cout << "YES" << endl;
+    } else {
+        cout << "NO" << endl;
     }
-    nl;
-
 
 }
 
@@ -147,10 +170,12 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
     }
     return 0;
 }
+
+    

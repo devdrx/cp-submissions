@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -104,39 +104,60 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
+vector<int> gr[100005];
+int resp[100005];
+set<int> answe;
+
+void dtfs(int u, int p = 0ll){
+    int f = 0;
+    for(auto v: gr[u]){
+        if(v == p) continue;
+        if(resp[v]==0){ //if any of them respects the parent, break
+            f=1;
+            break;
+        }
+    }
+    if(f==0 and resp[u]==1){
+        answe.insert(u);
+    }
+    for(auto v: gr[u]){
+        if(v==p) continue;
+        dtfs(v, u);
+    }
+}
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
-        }
-    }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
-            }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
-        }
-    }
 
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
+    int n, m, cnt = 0;
+    cin >> n; int root;
+    for(int i = 0; i < n; i++){
+        int x, y; cin >> x >> y;
+        if(x == -1) {
+            root = i+1;
+            continue;
+        }
+        gr[x].push_back(i+1);
+        gr[i+1].push_back(x);
+        resp[i+1] = y;
     }
-    nl;
+    dtfs(root);
 
+    if(answe.size()==0){
+        cout << "-1\n";
+    }
+    else{
+        for(auto x: answe){
+            cout << x << " ";
+        }
+        nl;
+    }
+    
+    
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -147,10 +168,12 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
     }
     return 0;
 }
+
+    

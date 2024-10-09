@@ -107,6 +107,34 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 void solve(){
     int n, W;
+    cin>>n >> W;
+    int h = 1, xx = W;
+    vi a(n);
+    cin >> a;
+    sort(all(a), greater<int>());
+    multiset<int> st;
+    for(int i = 0; i < n ; i++){
+        if(a[i]<=xx){
+            xx-=a[i];
+        }
+        else{
+            auto largestgap = st.lower_bound(a[i]); //find the largest gap that can be filled
+            if(largestgap!=st.end()){
+                int temp = *largestgap - a[i];
+                st.erase(largestgap);
+                if(temp>0) st.insert(temp);
+            }
+            else{
+                st.insert(xx); //insert the gap leftover
+                h++;
+                xx = W - a[i];
+            }
+        }
+    }
+    cout<<h; nl;
+
+    /* devdrx solution
+    int n, W;
     cin>>n>>W;
     vi a(n);
     cin>>a;
@@ -116,17 +144,17 @@ void solve(){
         cnt[x]++;
     }
     int h = 1, wide = W;
-
+ 
     for(int i = 0; i < n; i++){
         int mini = -1;
-
+ 
         for(int sz = 19; sz>=0;sz--){
             if(cnt[sz] and (1<<sz)<=wide){
                 mini = sz;
                 break;
             }
         }
-
+ 
         if(mini == -1){
             wide = W;
             h++;
@@ -140,8 +168,9 @@ void solve(){
         cnt[mini]--;
         wide -= 1<<mini;
     }
-
+ 
     cout << h << endl;
+    */
 
   
 }

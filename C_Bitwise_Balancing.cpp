@@ -8,8 +8,8 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
-#define all(v) v.begin(),v.end()
+#define dbg(var) cerr<<#var<<"="<<var<<" "
+#define aint(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
 #define mne(v)  *min_element(v.begin(),v.end())     // find min element in vector
@@ -79,7 +79,7 @@ uint power(int x, int y, int p =  MOD)
 
 // =============================================================================================================
 
-uint modInverse(int n, int p=MOD)       // using fermats little thm. [p needs to be prime which is mostly the case as mod value generally is 1e9+7]
+uint modInverse(int n, int p=MOD)       // using fermats little thm. [p needs to be prime which is mostly the case as mod value generainty is 1e9+7]
 {
     return power(n, p - 2, p);
 }
@@ -106,37 +106,73 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n;
-    cin >> n;
-    vi u(n), s(n);
-    cin >> u >> s;
-    map<int, vi> mp;
-    fr(i,n){
-        mp[u[i]].push_back(s[i]);
-    }
-    for(auto &x: mp){
-        sort(x.second.begin(), x.second.end(), greater<int>());
-    }
-    for(auto &x:mp){
-        for(int i = 1; i < x.second.size(); i++){
-            x.second[i] += x.second[i-1];
+    int b,c,d;
+    vector<int> binb(64, 0),binc(64, 0),bind(64, 0), bina(64, 0);
+    cin>>b>>c>>d;
+    int tempb=b, tempc=c, tempd=d;
+    for(int i=0;i<64;i++){
+        if(tempb%2==1){
+            binb[i]=1;
         }
+        tempb/=2;
     }
-    int ans[n+1] = {0};
-    for(auto x: mp){
-        for(int i = 1; i <= n; i++){
-            if(i > x.second.size()){
-                break;
+    for(int i=0;i<64;i++){
+        if(tempc%2==1){
+            binc[i]=1;
+        }
+        tempc/=2;
+    }
+    for(int i=0;i<64;i++){
+        if(tempd%2==1){
+            bind[i]=1;
+        }
+        tempd/=2;
+    }
+    for(int i=0;i<64;i++){
+        if(bind[i]==0){
+            if(binb[i]==0&&binc[i]==0){
+                bina[i]=0;
             }
-            ans[i]+=x.second[(x.second.size()/i)*i-1];
+            else if(binb[i]==1&&binc[i]==1){
+                bina[i]=1;
+            }
+            else if(binb[i]==1&&binc[i]==0){
+                cout<<-1<<endl;
+                return;
+            }
+            else if(binb[i]==0&&binc[i]==1){
+                bina[i]=0;
+            }
+        }
+        else{
+            if(binb[i]==0&&binc[i]==0){
+                bina[i]=1;
+            }
+            else if(binb[i]==1&&binc[i]==1){
+                bina[i]=0;
+            }
+            else if(binb[i]==1&&binc[i]==0){
+                bina[i]=0;
+            }
+            else if(binb[i]==0&&binc[i]==1){
+                cout<<-1<<endl;
+                return;
+            }
         }
     }
-
-    rep(i,1,n){
-        cout<<ans[i]<<" ";
+    int ans=0;
+    for(int i=0;i<64;i++){
+        ans+=bina[i]*pow(2, i);
     }
-    nl;
+    cout<<ans<<endl;
+    
+    
+    
 
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
 
 }
 
@@ -154,3 +190,5 @@ int32_t main()
     }
     return 0;
 }
+
+    
