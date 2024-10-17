@@ -106,25 +106,14 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
-
+    int n, m, ans = 0, cnt = 0;
+    cin >> n;
+    
     vi a(n); cin >> a;
+    vi b(n); cin >> b;
+    
+    
 
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
-
-    for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
-    }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
 
     //noum
     //i{}el{}ord
@@ -140,7 +129,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

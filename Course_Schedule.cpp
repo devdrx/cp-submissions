@@ -103,28 +103,46 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
+vi gr[100005];
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
-
-    vi a(n); cin >> a;
-
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
-
-    for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
+    int n, m;
+    cin >> n>>m;
+    vi indegree(n+1,0);
+    vi vis(n+1,0);
+    for(int i = 0; i < m; i++){
+        int u,v;
+        cin>>u >> v;
+        gr[u].push_back(v);
+        indegree[v]++;
     }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
+
+    queue<int> q;
+    for(int i = 1; i <= n; i++){
+        if(indegree[i]==0){
+            q.push(i);
+        }
+    }
+    vi order;
+    while(!q.empty()){
+        int u = q.front();
+        q.pop();
+        order.push_back(u);
+        for(auto v:gr[u]){
+            indegree[v]--;
+            if(indegree[v]==0){
+                q.push(v);
+            }
+        }
+    }
+    if((int)order.size()!=n){
+        cout<<"IMPOSSIBLE";
+        return;
+    }
+    for(auto x:order){
+        cout<<x<<" ";
+    }
+    
 
     //noum
     //i{}el{}ord
@@ -140,7 +158,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

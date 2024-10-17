@@ -19,7 +19,7 @@
 using namespace std;
 int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
 
-const int MX_SZ=1e5+5;
+const int MX_SZ=3*1e5+5;
 int par[MX_SZ];
 
 
@@ -103,28 +103,51 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
+vi gr[MX_SZ];
+int dp[MX_SZ][26];
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
-
-    vi a(n); cin >> a;
-
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
-
-    for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
+    int n, m, ans = 0, cnt = 0;
+    cin >> n >> m; string s; cin >> s;
+    // cout << s << endl;
+    vi indegree(n+1,0);
+    vi vis(n+1,0);
+    for(int i = 0; i < m; i++){
+        int u, v; cin >> u >> v;
+        gr[u].push_back(v);
+        // gr[v].push_back(u);
+        indegree[v]++;
     }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
+    queue<int>q; //contains all the indexes of string (nodes) with indegree 0 :topsort:
+    for(int i = 1; i <= n; i++){
+        if(indegree[i] == 0){
+            q.push(i); 
+        }
+    }
+    while(!q.empty()){
+        auto u = q.front();
+        q.pop();
+        cnt++;
+        dp[u][s[u-1]-'a']++;
+        for(auto v: gr[u]){
+            for(int j = 0; j < 26; j++){
+                dp[v][j] = max(dp[v][j], dp[u][j]);
+            }
+            indegree[v]--; //bcoz we have visited u
+            if(indegree[v] == 0){
+                q.push(v);
+            }
+        }
+    }
+    if(cnt < n){
+        cout << -1; return;
+    }
+    fr(i,n){
+        fr(j,26){
+            ans = max(ans, dp[i+1][j]);
+        }
+    }
+    cout << ans;
 
     //noum
     //i{}el{}ord
@@ -140,7 +163,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

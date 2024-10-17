@@ -106,25 +106,34 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
-
+    int n, m, ans = 0, cnt = 0;
+    cin >> n;
+    
     vi a(n); cin >> a;
-
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
-
+    int odd = 0, eve = 0;
+    vi newarr, uwu;
     for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
+        if(a[i]%2 == 0) uwu.push_back(a[i]);
+        else newarr.push_back(a[i]);
     }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
+    for(auto x: uwu) newarr.push_back(x);
+
+    //build prefix array for newarr
+    vi pref(n,0);
+    pref[0] = newarr[0];
+    for(int i = 1; i < n; i++){
+        pref[i] = pref[i-1] + newarr[i];
+    }
+    for(int i = 0; i < n; i++){
+        if(pref[i]%2 == 1){
+            ans++;
+        }
+        else cnt++;
+    }
+    if(cnt == n){
+        cnt = 0;
+    }
+    cout << max(cnt, ans) << endl;
 
     //noum
     //i{}el{}ord

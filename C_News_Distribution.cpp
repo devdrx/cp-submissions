@@ -1,5 +1,5 @@
 #include "bits/stdc++.h"
-#define int long long
+#define ll long long
 #define uint unsigned long long
 #define vi vector<int>
 #define vvi vector<vi >
@@ -103,28 +103,57 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+vi gr[500005];
+vi vis(500005,0);
+vi ans(500005,0);
 
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
-
-    vi a(n); cin >> a;
-
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
-
-    for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
-    }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
+    int n,m;
+    cin >> n >> m;
+	
+	for (ll i = 0; i < m; i++) {
+		ll k;
+		cin >> k;
+		vector<ll> v(k);
+		for (ll j = 0; j < k; j++) {
+			cin >> v[j];
+			--v[j];
+		}
+		
+		for (ll j = 0; j + 1 < k; j++) {
+			gr[v[j]].push_back(v[j + 1]);
+			gr[v[j + 1]].push_back(v[j]);
+		}
+	}
+	vi a(n);
+	for (ll i = 0; i < n; i++) {
+		if (!vis[i]) {
+			vector<ll> component;
+			
+			queue<ll> q;
+			q.push(i);
+			
+			while (!q.empty()) {
+				ll x = q.front();
+				q.pop();
+				
+				if (vis[x]) continue;
+				vis[x] = 1;
+				component.push_back(x);
+				
+				for (ll y: gr[x]) {
+					if (!vis[y]) {
+						q.push(y);
+					}
+				}
+			}
+			
+			for (ll x: component) a[x] = component.size();
+		}
+	}
+	
+	for (ll i = 0; i < n; i++) cout << a[i] << " ";
 
     //noum
     //i{}el{}ord
@@ -140,7 +169,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

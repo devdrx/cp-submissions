@@ -103,28 +103,72 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+vi gr[MX_SZ];
+bool vis[MX_SZ];
+bool col[MX_SZ];
 
+bool flag = true;
+
+void dfs(int v, bool c){
+    if(vis[v]){
+        return;
+    }
+    vis[v] = 1;
+    col[v] = c;
+
+    for(auto x: gr[v]){
+        if(!vis[x]){
+            dfs(x,c^1);
+        }
+        else{
+            if(col[x] == c){
+                flag = false;
+            }
+        }
+    }
+}
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
-
-    vi a(n); cin >> a;
-
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
+    int n, m, ans = 0, cnt = 0;
+    cin >> n >> m;
+    
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        gr[u].push_back(v);
+        gr[v].push_back(u);
+    }
 
     for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
+        if(!vis[i]){
+            dfs(i,0);
+        }
     }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
+
+    if(flag){
+        int cnt[2] = {0};
+        for(int i = 0; i < n; i++){
+            cnt[col[i]]++;
+        }
+        cout << cnt[0] << "\n";
+        for(int i = 0; i < n; i++){
+            if(col[i] == 0){
+                cout << i+1 << " ";
+            }
+        }
+        nl;
+        cout << cnt[1] << "\n";
+        for(int i = 0; i < n; i++){
+            if(col[i] == 1){
+                cout << i+1 << " ";
+            }
+        }
+        nl;
+    }
+    else{
+        cout << "-1\n";
+    }
 
     //noum
     //i{}el{}ord
@@ -140,7 +184,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

@@ -19,7 +19,7 @@
 using namespace std;
 int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
 
-const int MX_SZ=1e5+5;
+const int MX_SZ=150005;
 int par[MX_SZ];
 
 
@@ -103,28 +103,64 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+vi gr[MX_SZ];
+vi label(MX_SZ); //current component of each vertex
+vi siz(MX_SZ, 1); //size of each component (labels)
+vi nedges(MX_SZ,0); //number of edges in each component
 
+void relabel(int v, int targ){
+    if(label[v] == targ) return;
+    label[v] = targ;
+    for(auto x: gr[v]){
+        relabel(x,targ);
+    }
+}
+
+void merge(int u, int v){
+    gr[u].push_back(v);
+    gr[v].push_back(u);
+
+    int cu = label[u];
+    int cv = label[v];
+    ++nedges[cu];
+    
+    //assume size cu <= size cv
+    if(cu == cv){
+        return;
+    }
+
+    if(siz[cu] > siz[cv]){
+        swap(u,v);
+        swap(cu,cv);
+    }
+
+    relabel(u,cv);
+
+    siz[cv] += siz[cu];
+    nedges[cv] += nedges[cu];
+
+}
 
 void solve(){
-    int n, c, ans = 0, cnt = 0;
-    cin >> n >> c;
+    int n, m, ans = 0, cnt = 0;
+    cin >> n >> m;
+    fr(i,n) {label[i] = i;}
 
-    vi a(n); cin >> a;
-
-    int odd = 0, even = 0;
-
-    //by principle of inclusion and exclusion
-    ans = ((c+1)*(c+2))/2;
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        merge(u,v);
+    }
+    bool possible = true;
 
     for(int i = 0; i < n; i++){
-        ans -= a[i]/2 + 1; // this is for x + y not to be in set
-        ans -= c-a[i] +1; // this is for y-x to be in set, iterate y from a[i] to c, cuz for all these y, there will be some x such that y-x is in set
-        (a[i]%2 ? odd : even)++;
+        if(nedges[label[i]] != siz[label[i]]*(siz[label[i]]-1)/2){
+            possible = false;
+            break;
+        }
     }
-    //clever one, x+y=s_i and y+x=s_j can have integral solutions when s_i+s_j is even, hence suitable (si,sj) pairs can be calculated with odd and even counts 
-    ans += (even*(even+1))/2;
-    ans += (odd*(odd+1))/2;
-    cout << ans << endl;
+    cout << (possible ? "YES" : "NO");
 
     //noum
     //i{}el{}ord
@@ -140,7 +176,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
