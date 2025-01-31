@@ -15,6 +15,10 @@
 #define mne(v) *min_element(v.begin(), v.end()) // find min element in vector
 #define unq(v) v.resize(distance(v.begin(), unique(v.begin(), v.end())));
 // make sure to sort before applying unique // else only consecutive duplicates would be removed
+template <class T>
+bool ckmin(T &a, const T &b) { return b < a ? a = b, 1 : 0; }
+template <class T>
+bool ckmax(T &a, const T &b) { return a < b ? a = b, 1 : 0; }
 #define bin(x, y) bitset<y>(x)
 using namespace std;
 int MOD = 1e9 + 7; // Hardcoded, directly change from here for functions!
@@ -136,26 +140,74 @@ uint nCr(int n, int r, int p = MOD) // faster calculation..
 
 void solve()
 {
-    int n;
-    cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
-    }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
+    int n, k, q;
+    cin >> n >> k >> q;
+
+    vector<vector<int>> a(n, vector<int>(k));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < k; j++)
+        {
+            cin >> a[i][j];
         }
     }
+
+    vector<vector<int>> b(n, vector<int>(k));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < k; j++)
+        {
+            if (i == 0)
+            {
+                b[i][j] = a[i][j];
+            }
+            else
+            {
+                b[i][j] = b[i - 1][j] | a[i][j];
+            }
+        }
+    }
+
+    while (q--)
+    {
+        int L = 0, R = n - 1;
+
+        int m;
+        cin >> m;
+
+        while (m--)
+        {
+            int r;
+            char ch;
+            int c;
+            cin >> r >> ch >> c;
+            r--;
+
+            if (ch == '>')
+            {
+                int lo = upper_bound(b.begin(), b.end(), c, [&](int val, const vector<int>& row) { return val < row[r]; }) - b.begin();
+
+                // needs to be >= this
+                L = max(L, lo);
+            }
+            else
+            {
+                //find last
+                int i = lower_bound(b.begin(), b.end(), c, [&](const vector<int>& row, int val) { return row[r] < val; }) - b.begin();
+                R = min(R, i-1);
+            }
+        }
+
+        if (L <= R)
+        {
+            cout << (L + 1) << "\n";
+        }
+        else
+        {
+            cout << -1 << "\n";
+        }
+    }
+
     // noum
     // i{}el{}ord
     // cCas
@@ -169,7 +221,7 @@ int32_t main()
     cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

@@ -105,26 +105,40 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 // ==================================== MATH UTIL ENDS=======================================================//
 int n, m, ans = 0, cnt = 0;
 vector<vi> g;
-vector<bool> vis;
-vector<int> par;
-//bfs function
+vi dist(100001);
+vector<bool> vis(100001);
+
+//straightforward question
+//just do a bfs and keep track of parent of each node
+//then backtrack from n to 1 to get the path
+//if n is not reachable from 1 then print "IMPOSSIBLE"
+//else print the path
 
 
-void bfs(){
+bool bfs(){
     queue<int> q;
     q.push(1);
     vis[1] = 1;
+    dist[1] = 1;
+
     while(!q.empty()){
         int u = q.front();
         q.pop();
+
+        if (u == n){
+            return true;
+        }
+
         for(auto v: g[u]){
             if(!vis[v]){
+                dist[v] = dist[u] + 1;
                 vis[v] = 1;
                 par[v] = u;
                 q.push(v);
             }
         }
     }
+    return false;
 }   
 
 void solve(){
@@ -137,6 +151,22 @@ void solve(){
         g[v].push_back(u);
     }
     
+    if(bfs()){
+        cout << dist[n] << endl;
+
+        int path = n;
+        vi res;
+        while(path != 0){
+            res.push_back(path);
+            path = par[path];
+        }
+
+        reverse(all(res));
+        cout << res << endl;
+    }
+    else{
+        cout << "IMPOSSIBLE" << endl;
+    }
     
 
     //noum
@@ -153,7 +183,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

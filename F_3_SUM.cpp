@@ -138,24 +138,38 @@ void solve()
 {
     int n;
     cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
+    int cnt[10] = {};
+    for (int i = 0; i < n; i++)
+    {
+        int x;
+        cin >> x;
+        cnt[x % 10]++;
     }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
+    vector<int> v;
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 0; j < min(cnt[i], 3ll); j++)
+        {
+            v.push_back(i);
         }
     }
+    int m = v.size();
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = i + 1; j < m; j++)
+        {
+            for (int k = j + 1; k < m; k++)
+            {
+                if ((v[i] + v[j] + v[k]) % 10 == 3)
+                {
+                    cout << "YES\n";
+                    return;
+                }
+            }
+        }
+    }
+    cout << "NO\n";
+
     // noum
     // i{}el{}ord
     // cCas

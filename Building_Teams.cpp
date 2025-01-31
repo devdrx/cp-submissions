@@ -110,10 +110,10 @@ vi color;
 
 
 bool dfs(int u, int c){
-    // vis[u] = true;
+    vis[u] = true;
     color[u] = c;
     for(auto v : g[u]){
-        // if(v == par) continue;
+        if(v == par[u]) continue;
         if(color[v] == 0){
             if(!dfs(v, (color[u]^3)))
                 return false;

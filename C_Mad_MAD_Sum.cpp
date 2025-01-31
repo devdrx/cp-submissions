@@ -103,39 +103,32 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-vector<int> MAD(const vector<int>& array) {
-    int n = array.size();
-    unordered_map<int, int> frequency;
-    int MAD = 0;
-    vector<int> MADs(n, 0);
 
-    for (int i = 0; i < n; ++i) {
-        int num = array[i];
-        frequency[num]++;
-        
-        if (frequency[num] == 2) {
-            MAD = max(MAD, num);
-        }
-        
-        MADs[i] = MAD;
-    }
-
-    return MADs;
-}
 
 void solve(){
-    int n; 
+    int n;
     cin >> n;
-    vi a(n);
-    cin >> a;
-    int sum=accumulate(all(a),0);
-    while(true){
-        vi b = MAD(a);
-        a = b;
-        int x = accumulate(all(b),0);
-        sum+=x;
-        if(x == 0) {cout << sum << endl; break;}
-    }    
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+      cin >> a[i];
+    }
+    int64_t ans = 0;
+    for (int it = 0; it < 2; it++) {
+      vector<bool> was(n + 1, false);
+      int mx = 0;
+      for (int i = 0; i < n; i++) {
+        ans += a[i];
+        if (was[a[i]]) {
+          mx = max(mx, a[i]);
+        }
+        was[a[i]] = true;
+        a[i] = mx;
+      }
+    }
+    for (int i = 0; i < n; i++) {
+      ans += 1ll * a[i] * (n - i);
+    }
+    cout << ans << '\n';
 }
 
 int32_t main()

@@ -133,29 +133,32 @@ uint nCr(int n, int r, int p = MOD) // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
+#define N 200005
+int n, m, v, s[N], pf[N], sf[N];
 void solve()
 {
-    int n;
-    cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
+    cin >> n >> m >> v;
+    for (int i = 1; i <= n; i++){
+        cin >> s[i], s[i] += s[i - 1];
     }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
-        }
-    }
+    s[n + 1] = s[n];
+    int s1 = 0, s2 = 0;
+    for (int i = 1, lst = 0; i <= n; i++)
+        if (s[i] - s[lst] >= v)
+            pf[++s1] = lst = i;
+    s1 = min(s1, m); // s1 is the number of cuts we can make from the start
+    for (int i = n, lst = n + 1; i >= 1; i--)
+        if (s[lst - 1] - s[i - 1] >= v)
+            sf[++s2] = lst = i;
+    sf[0] = n + 1;
+    s2 = min(s2, m); // s2 is the number of cuts we can make from the end
+
+    int ans = -1;
+    for (int i = m - s2; i <= s1; i++)
+        if (pf[i] < sf[m - i])
+            ans = max(ans, s[sf[m - i] - 1] - s[pf[i]]);
+    cout << ans << '\n';
+
     // noum
     // i{}el{}ord
     // cCas

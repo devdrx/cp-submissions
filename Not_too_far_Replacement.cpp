@@ -113,8 +113,6 @@ void solve(){
     cin >> a;
     int last = a[n];
     srt(a);
-    int mn = mne(a);
-    int mx = mxe(a);
     for(int i = 0; i < n+1; i++){
         if(a[i]<=2*last){
             if(a[i]>last){

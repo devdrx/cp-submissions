@@ -136,30 +136,36 @@ uint nCr(int n, int r, int p = MOD) // faster calculation..
 
 void solve()
 {
-    int n;
-    cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
-    }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
+    int n, m;
+    cin >> n >> m;
+    vector<string> s(n);
+    for (int i = 0; i < n; ++i)
+        cin >> s[i];
+    int ret = 0;
+    auto get = [&](int k)
+    {
+        string t;
+        for (int j = k; j < m - k; ++j)
+            t += s[k][j];
+        for (int i = k + 1; i < n - 1 - k; ++i)
+            t += s[i][m - 1 - k];
+        for (int j = m - 1 - k; j >= k; --j)
+            t += s[n - 1 - k][j];
+        for (int i = n - 2 - k; i > k; --i)
+            t += s[i][k];
+        return t;
+    };
+    for (int k = 0; k < n / 2 && k < m / 2; ++k)
+    {
+        auto t = get(k);
+        t += t.substr(0, 3);
+        for (int i = 0; i + 4 <= t.size(); ++i)
+        {
+            if (t.substr(i, 4) == "1543")
+                ret++;
         }
     }
-    // noum
-    // i{}el{}ord
-    // cCas
-    // tleopt
+    cout << ret << '\n';
 }
 
 int32_t main()

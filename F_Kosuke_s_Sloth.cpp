@@ -90,7 +90,7 @@ bool isPrime(int n)
 /// ====================================PRIME utility ENDS here==================================================
 
 // ========================================MATH UTIL BEGINS==============================================
-//==================================== compute higher powers with mod ===================================
+//==================================== compute higher powers with MOD ===================================
 uint power(int x, int y, int p = MOD)
 {
     unsigned long long res = 1;
@@ -137,25 +137,15 @@ uint nCr(int n, int r, int p = MOD) // faster calculation..
 void solve()
 {
     int n;
-    cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
+    long long k;
+    cin >> k >> n, k %= MOD;
+    int i = 1, a = 0, b = 1 % n;
+    while (b)
+    {
+        int c = (a + b) % n;
+        a = b, b = c, i++;
     }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
-        }
-    }
+    cout << i * k % MOD << '\n';
     // noum
     // i{}el{}ord
     // cCas

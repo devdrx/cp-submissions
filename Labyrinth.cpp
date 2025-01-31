@@ -134,42 +134,114 @@ uint nCr(int n, int r, int p = MOD) // faster calculation..
 }
 // ==================================== MATH UTIL ENDS=======================================================//
 
+char ar[1001][1001]; // input
+char br[1001][1001];  // parent
+bool vis[1001][1001];
+int n, m;
+vector<char> path;
+
+bool isValid(int x , int y){
+	
+	if(x < 1 || x > n || y < 1 || y > m) return false;
+	
+	if(ar[x][y] == '#' || vis[x][y] == true) return false;
+	
+	return true;
+}
+
+
+bool bfs(int x, int y)
+{
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    vis[x][y] = true;
+
+    while (!q.empty())
+    {
+        int a = q.front().first;
+        int b = q.front().second;
+        q.pop();
+
+        if (ar[a][b] == 'B')
+        {
+            while (1)
+            {
+                path.push_back(br[a][b]);
+
+                if (path.back() == 'L')
+                    b++;
+                if (path.back() == 'R')
+                    b--;
+                if (path.back() == 'U')
+                    a++;
+                if (path.back() == 'D')
+                    a--;
+
+                if (a == x && b == y)
+                    break;
+            }
+            return true;
+        }
+
+        // left
+        if (isValid(a, b - 1))
+            br[a][b - 1] = 'L', q.push({a, b - 1}), vis[a][b - 1] = true;
+
+        // right
+        if (isValid(a, b + 1))
+            br[a][b + 1] = 'R', q.push({a, b + 1}), vis[a][b + 1] = true;
+
+        // up
+        if (isValid(a - 1, b))
+            br[a - 1][b] = 'U', q.push({a - 1, b}), vis[a - 1][b] = true;
+
+        // down
+        if (isValid(a + 1, b))
+            br[a + 1][b] = 'D', q.push({a + 1, b}), vis[a + 1][b] = true;
+    }
+
+    return false;
+}
+
 void solve()
 {
-    int n;
-    cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
-    }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
+    cin >> n >> m;
+    int x; // starting point
+    int y;
+
+    for(int i = 1; i<=n; i++)
+    {
+        for(int j = 1; j<=m; j++)
+        {
+            cin >> ar[i][j];
+            if (ar[i][j] == 'A')
+                x = i, y = j;
         }
     }
-    // noum
-    // i{}el{}ord
-    // cCas
-    // tleopt
-}
+
+    if (bfs(x, y) == true)
+    {
+        cout << "YES" << endl
+             << path.size() << endl;
+        while (path.size() > 0)
+            cout << path.back(), path.pop_back();
+    }
+    else
+    {
+        cout << "NO";
+    }
+        // noum
+        // i{}el{}ord
+        // cCas
+        // tleopt
+    }
 
 int32_t main()
 {
-
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();

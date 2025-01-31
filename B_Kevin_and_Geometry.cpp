@@ -8,7 +8,7 @@
 #define fr(i,n) for(int i=0; i<(n); i++)
 #define rep(i,a,n) for(int i=(a); i<=(n); i++)
 #define nl cout<<"\n"
-#define dbg(var) cout<<#var<<"="<<var<<" "
+#define dbg(var) cerr<<#var<<"="<<var<<" "
 #define all(v) v.begin(),v.end()
 #define srt(v)  sort(v.begin(),v.end())         // sort 
 #define mxe(v)  *max_element(v.begin(),v.end())     // find max element in vector
@@ -34,61 +34,6 @@ template<typename typC,typename typD> ostream &operator<<(ostream &cout,const ve
 template<typename typC> ostream &operator<<(ostream &cout,const vector<typC> &a) { int n=a.size(); if (!n) return cout; cout<<a[0]; for (int i=1; i<n; i++) cout<<' '<<a[i]; return cout; }
 // ===================================END Of the input module ==========================================
 
-
-constexpr int N = 200005; // No. of vertices
-constexpr int L = 20; // ceil(logN / log2) + 1
-
-// Vertices from 1 to N.
-vector<int> adj[N + 1];
-int up[N + 1][L];
-int level[N + 1];
-
-void dfs(int u, int prev = 0){
- up[u][0] = prev;
- for (auto &v : adj[u]){
-     if (v == prev) continue;
-
-     level[v] = level[u] + 1;
-     dfs(v, u);
- }
-}
-
-void binaryLift(){
- dfs(1);
- for (int i = 1; i < L; i++)
-     for (int j = 1; j <= N; j++)
-          up[j][i] = up[up[j][i - 1]][i - 1];
-}
-
-int LCA(int a, int b){
- if (level[a] > level[b])
-     swap(a, b);
-
- int diff = level[b] - level[a];
- for (int i = 0; i < L; i++){
-     if ((diff & (1 << i)))
-         b = up[b][i];
- }
-
- if (a == b) return a;
-
- for (int i = L - 1; i >= 0; i--){
-     if (up[a][i] != up[b][i]){
-         a = up[a][i];
-         b = up[b][i];
-     }
- }
- return up[a][0];
-}
-
-void addEdge(int u, int v){
- adj[u].push_back(v);
- adj[v].push_back(u);
-}
-
-int dist(int a, int b){
- return level[a] + level[b] - 2 * level[LCA(a, b)];
-}
 /// ====================================PRIME utility ==================================================
 int sz=1e6+5;
 bool PrimeSieve[1000005];   // 1e6+5
@@ -161,21 +106,63 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int n; cin >> n;
-    vvi a(n, vi(n));
-    fr(i, n) fr(j, n) {
-        char c; cin >> c;
-        a[i][j] = c - '0';
+    int n;
+    cin >> n;
+
+    vector<int> nums(n);
+    cin >> nums;
+
+    map<int, int> count;
+    for (int x : nums) {
+        count[x]++;
     }
-    int ans = 0;
-    fr(i,n){
-        fr(j,n){
-            int s = a[i][j] + a[j][n-i-1] + a[n-i-1][n-j-1] + a[n-1-j][i];
-            ans += min(s, 4-s);
+
+    vector<int> dup;
+    for (auto &p : count) {
+        if (p.second > 1) {
+            dup.push_back(p.first);
         }
     }
-    cout << ans/4 << endl;
-    
+
+    if (dup.empty()) {
+        cout << "-1\n";
+        return;
+    }
+
+    if (dup.size() > 1) {
+        cout << dup[0] << " " << dup[0] << " " << dup[1] << " " << dup[1] << "\n";
+        return;
+    }
+
+    int d = dup[0];
+    vector<int> rem;
+    int skip = 2;
+
+    for (int x : nums) {
+        if (x == d && skip > 0) {
+            skip--;
+        } else {
+            rem.push_back(x);
+        }
+    }
+
+    sort(rem.begin(), rem.end());
+    for (int i = 0; i < rem.size() - 1; i++) {
+        if (rem[i + 1] < rem[i] + 2 * d) {
+            cout << d << " " << d << " " << rem[i] << " " << rem[i + 1] << "\n";
+            return;
+        }
+    }
+
+    cout << "-1\n";
+    return;
+
+
+    //noum
+    //i{}el{}ord
+    //cCas
+    //tleopt
+
 }
 
 int32_t main()

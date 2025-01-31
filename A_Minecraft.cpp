@@ -136,26 +136,83 @@ uint nCr(int n, int r, int p = MOD) // faster calculation..
 
 void solve()
 {
-    int n;
-    cin >> n;
-    vi a(n); cin >> a;
-    vector<pair<int, int>> ans;
-    while (a.size() > 2) {
-        ans.push_back({1, 3});
-        vector<int> cur(a.begin(), a.begin() + 3);
-        sort(cur.begin(), cur.end());
-        int median = cur[1];
-        int pos = find(a.begin(), a.begin() + 3, median) - a.begin();
-        a.erase(a.begin() + pos);
+    int n, k;
+    cin >> n >> k;
+    vi a(n);
+    cin >> a;
+    int sum = 0;
+    fr(i, n)
+    {
+        sum += a[i];
     }
-    if (a.size() == 2 && a[0] > a[1]) {
-        cout << -1 << endl;
-    } else {
-        cout << ans.size() << endl;
-        for (auto &it : ans) {
-            cout << it.first << " " << it.second << endl;
+    vector<set<int>> sec;
+    for(int i = 0; i < k; i++)
+    {
+        int x;
+        cin >> x;
+        
+        set<int> temp;
+        fr(i, x)
+        {
+            int tt;
+            cin >> tt;
+            temp.insert(a[tt - 1]);
+        }
+        sec.push_back(temp);
+    }
+    vector<int> ans(1e5, 0);
+    //k * gapap + gap * lastsum
+    for (auto st : sec)
+    {
+        auto it = st.begin();
+        int curr = 1; 
+
+        for (int i = 0; i < 1e5; i++)
+        {
+            if (it == st.end())
+            {
+                ans[i] += curr++;
+                continue;
+            }
+
+            if (curr == *it)
+            {
+                it++;
+                curr++;
+                i--;
+                continue;
+            }
+
+            ans[i] += curr;
+            curr++; 
         }
     }
+    int last = ans[1e5 - 1] ;
+    for (int i = 1; i < 1e5; i++)
+    {
+        ans[i] += ans[i - 1];
+    }
+    
+    int q;
+    cin >> q;
+    while (q--)
+    {
+        int qry;
+        cin >> qry;
+        
+        if(qry <= 1e5){
+            cout << sum + ans[qry - 1] << "\n";
+            continue;
+        }
+        else{
+            int gap = qry - 1e5;
+            cout << sum + ans[1e5 - 1] + k*((gap)*(gap+1)/2) + gap * last<< "\n";            
+        }
+    }
+
+    // cout << ans;
+    // cout << last;
+
     // noum
     // i{}el{}ord
     // cCas
@@ -169,7 +226,7 @@ int32_t main()
     cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
