@@ -106,102 +106,42 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int l,r;
-    cin >> l >> r;
-    int L,R;
-    cin >> L >> R;
-    
-    //calculate intersection
-    int intl = max(l,L);
-    int intr = min(r,R);
-    if(intl > intr){
-        cout << 1; nl;
-        return;
+    int n, k;
+    cin >> n >> k;
+    vi a(n);
+    cin >> a;
+
+    if(n==k){
+        vi b;
+        for(int i=1; i<n; i+=2){
+            b.push_back(a[i]);
+        }
+        b.push_back(0);
+        for(int i = 0; i < n; i++){
+            if(b[i]!=i+1){
+                cout << i+1 << endl;
+                return;
+            }
+        }
     }
     else{
-        if(l == L and r==R){
-            cout << R-L; nl;
-            return;
+        for(int i = 1; i < n-k+2; i++){
+            if(a[i]>1){
+                cout << 1 << endl;
+                return;
+            }
         }
-        else if(l == L){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else if(r == R){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else{
-            cout << intr-intl+2; nl;
-            return;
-        }
+        cout << 2 << endl;
     }
 
-
-
+    
 
     //noum
     //i{}el{}ord
     //cCas
     //tleopt
-
 }
 
-int32_t main()
-{
- 
- ios_base::sync_with_stdio(false);
- cin.tie(NULL);
+//BOyIZGCfufImK0AZ mongodb 
 
-    int T = 1;
-    cin >> T;
-    while (T--)
-    {
-        solve();
-    }
-    return 0;
-}
-
-    // int l, r, L, R;
-    // int ans = 0;
-    // vi pos(101, 0);
-    // cin >> l >> r >> L >> R;
-    
-    // //if no intersection
-    // if (L > r || l > R) {
-    //     cout << 1 << endl;
-    //     return;
-    // }
-    
-    // if (L < l) {
-    //     swap(l, L);
-    //     swap(r, R);
-    // }
-    
-    
-    // for (int i = l; i <= r; i++) {
-    //     pos[i]++;
-    // }
-    
-    // for (int i = L; i <= R; i++) {
-    //     pos[i]++;
-    // }
-    
-    // int real = -1;
-    // int rear = -1;
-    // // cout << pos << endl;
-    // for (int i = 1; i <= 100; i++) {
-    //     if (pos[i] == 2){ 
-    //         ans++;
-    //         if (real == -1) {
-    //             real = i;
-    //         }
-    //         rear = i;
-    //     }
-    // }
-    // ans--;
-    // // cout << real << " " << rear << endl;
-    // if (min(min(l, r), min(L, R)) < real) ans++;
-    // if (max(max(l, r), max(L, R)) > rear) ans++;
-    
-    // cout << ans << endl;
+//mongodb+srv://devdarshanpatra4:BOyIZGCfufImK0AZ@grievancedb.0cswy.mongodb.net/?retryWrites=true&w=majority&appName=grievancedb

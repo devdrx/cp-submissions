@@ -17,13 +17,13 @@
 // make sure to sort before applying unique // else only consecutive duplicates would be removed 
 #define bin(x,y)  bitset<y>(x) 
 using namespace std;
-int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
+int MOD=998244353;      // Hardcoded, directly change from here for functions!
 
 const int MX_SZ=1e5+5;
 int par[MX_SZ];
 
 
-void modadd(int &a , int b) {a=((a%MOD)+(b%MOD))%MOD;}
+int modadd(int &a , int b) {return ((a%MOD)+(b%MOD))%MOD;}
 void modsub(int &a , int b) {a=((a%MOD)-(b%MOD)+MOD)%MOD;}
 void modmul(int &a , int b) {a=((a%MOD)*(b%MOD))%MOD;}
 // ================================== take ip/op like vector,pairs directly!==================================
@@ -106,39 +106,30 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int l,r;
-    cin >> l >> r;
-    int L,R;
-    cin >> L >> R;
+    int t;
+    cin >> t;
+
+    //pre processing
+    vector<vector<int>> dp(61, vector<int>(3, 0));
+
+    //base case
+    dp[2][0] = 1;
+    dp[2][1] = 0;
+    dp[2][2] = 1;
     
-    //calculate intersection
-    int intl = max(l,L);
-    int intr = min(r,R);
-    if(intl > intr){
-        cout << 1; nl;
-        return;
+    for (int i = 4; i <= 60; i += 2)
+    {
+        dp[i][0] = modadd(dp[i - 2][1], nCr((i - 1), i / 2, MOD));
+        dp[i][1] = modadd(dp[i - 2][0], nCr((i - 2), i / 2, MOD));
+        dp[i][2] = 1;
     }
-    else{
-        if(l == L and r==R){
-            cout << R-L; nl;
-            return;
-        }
-        else if(l == L){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else if(r == R){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else{
-            cout << intr-intl+2; nl;
-            return;
-        }
+    
+    while (t--)
+    {
+        int n;
+        cin >> n;
+        cout << dp[n][0] << " " << dp[n][1] << " " << dp[n][2] << endl;
     }
-
-
-
 
     //noum
     //i{}el{}ord
@@ -154,7 +145,7 @@ int32_t main()
  cin.tie(NULL);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
@@ -162,46 +153,4 @@ int32_t main()
     return 0;
 }
 
-    // int l, r, L, R;
-    // int ans = 0;
-    // vi pos(101, 0);
-    // cin >> l >> r >> L >> R;
     
-    // //if no intersection
-    // if (L > r || l > R) {
-    //     cout << 1 << endl;
-    //     return;
-    // }
-    
-    // if (L < l) {
-    //     swap(l, L);
-    //     swap(r, R);
-    // }
-    
-    
-    // for (int i = l; i <= r; i++) {
-    //     pos[i]++;
-    // }
-    
-    // for (int i = L; i <= R; i++) {
-    //     pos[i]++;
-    // }
-    
-    // int real = -1;
-    // int rear = -1;
-    // // cout << pos << endl;
-    // for (int i = 1; i <= 100; i++) {
-    //     if (pos[i] == 2){ 
-    //         ans++;
-    //         if (real == -1) {
-    //             real = i;
-    //         }
-    //         rear = i;
-    //     }
-    // }
-    // ans--;
-    // // cout << real << " " << rear << endl;
-    // if (min(min(l, r), min(L, R)) < real) ans++;
-    // if (max(max(l, r), max(L, R)) > rear) ans++;
-    
-    // cout << ans << endl;

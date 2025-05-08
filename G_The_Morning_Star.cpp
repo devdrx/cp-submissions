@@ -106,38 +106,37 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int l,r;
-    cin >> l >> r;
-    int L,R;
-    cin >> L >> R;
-    
-    //calculate intersection
-    int intl = max(l,L);
-    int intr = min(r,R);
-    if(intl > intr){
-        cout << 1; nl;
-        return;
-    }
-    else{
-        if(l == L and r==R){
-            cout << R-L; nl;
-            return;
-        }
-        else if(l == L){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else if(r == R){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else{
-            cout << intr-intl+2; nl;
-            return;
-        }
-    }
 
-
+    //flamestorm solution
+    int n;
+    cin >> n;
+    map<int, int> up, side, diag1, diag2;
+    int ans = 0;
+    for(int i = 0; i < n; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        up[x]++;
+        side[y]++;
+        diag1[x-y]++;
+        diag2[x+y]++;
+    }
+    for(auto x : up)
+    {
+        ans+=x.second*(x.second-1);
+    }
+    for(auto x : side)
+    {
+        ans+=x.second*(x.second-1);
+    }
+    for(auto x : diag1)
+    {
+        ans+=x.second*(x.second-1);
+    }for(auto x : diag2)
+    {
+        ans+=x.second*(x.second-1);
+    }
+    cout << ans << endl;
 
 
     //noum
@@ -162,46 +161,4 @@ int32_t main()
     return 0;
 }
 
-    // int l, r, L, R;
-    // int ans = 0;
-    // vi pos(101, 0);
-    // cin >> l >> r >> L >> R;
     
-    // //if no intersection
-    // if (L > r || l > R) {
-    //     cout << 1 << endl;
-    //     return;
-    // }
-    
-    // if (L < l) {
-    //     swap(l, L);
-    //     swap(r, R);
-    // }
-    
-    
-    // for (int i = l; i <= r; i++) {
-    //     pos[i]++;
-    // }
-    
-    // for (int i = L; i <= R; i++) {
-    //     pos[i]++;
-    // }
-    
-    // int real = -1;
-    // int rear = -1;
-    // // cout << pos << endl;
-    // for (int i = 1; i <= 100; i++) {
-    //     if (pos[i] == 2){ 
-    //         ans++;
-    //         if (real == -1) {
-    //             real = i;
-    //         }
-    //         rear = i;
-    //     }
-    // }
-    // ans--;
-    // // cout << real << " " << rear << endl;
-    // if (min(min(l, r), min(L, R)) < real) ans++;
-    // if (max(max(l, r), max(L, R)) > rear) ans++;
-    
-    // cout << ans << endl;

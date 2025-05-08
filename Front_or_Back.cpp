@@ -17,8 +17,8 @@
 // make sure to sort before applying unique // else only consecutive duplicates would be removed 
 #define bin(x,y)  bitset<y>(x) 
 using namespace std;
-int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
 
+static const int MOD = 998244353;
 const int MX_SZ=1e5+5;
 int par[MX_SZ];
 
@@ -103,42 +103,51 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
-
-
+long long modexp(long long base, long long exp) {
+    if (exp == 0) return 1;
+    long long half = modexp(base, exp / 2);
+    long long result = (half * half) % MOD;
+    if (exp & 1) result = (result * base) % MOD;
+    return result;
+}
 void solve(){
-    int l,r;
-    cin >> l >> r;
-    int L,R;
-    cin >> L >> R;
-    
-    //calculate intersection
-    int intl = max(l,L);
-    int intr = min(r,R);
-    if(intl > intr){
-        cout << 1; nl;
+    int n;
+    cin >> n;
+    map<int,int> mp;
+    int inv = 0;
+    for(int i = 0; i < n; i++){
+        int a;
+        cin >> a;
+        if (a >= 0 && a < n) mp[a]++;
+        else inv = 1;
+    }
+    if (inv){
+        cout << 0 << "\n";
         return;
     }
-    else{
-        if(l == L and r==R){
-            cout << R-L; nl;
-            return;
-        }
-        else if(l == L){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else if(r == R){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else{
-            cout << intr-intl+2; nl;
-            return;
+    int f = 1;
+    int pairs = n / 2;
+    for(int x = 0ll; x<=(n - 1)/2; x++){
+        int y = n-1-x;
+        int cx = mp.count(x) ? mp[x] : 0;
+        int cy = mp.count(y) ? mp[y] : 0;
+        if(x < y){
+            if (cx + cy != 2){
+                f = 0;
+                break;
+            }
+        } 
+        else {
+            if (cx != 1){
+                f = 0;
+            }
+            break;
         }
     }
+    if (!f) cout << 0 << "\n";
+    else cout << modexp(2, pairs) << "\n";
 
-
-
+    
 
     //noum
     //i{}el{}ord
@@ -162,46 +171,4 @@ int32_t main()
     return 0;
 }
 
-    // int l, r, L, R;
-    // int ans = 0;
-    // vi pos(101, 0);
-    // cin >> l >> r >> L >> R;
     
-    // //if no intersection
-    // if (L > r || l > R) {
-    //     cout << 1 << endl;
-    //     return;
-    // }
-    
-    // if (L < l) {
-    //     swap(l, L);
-    //     swap(r, R);
-    // }
-    
-    
-    // for (int i = l; i <= r; i++) {
-    //     pos[i]++;
-    // }
-    
-    // for (int i = L; i <= R; i++) {
-    //     pos[i]++;
-    // }
-    
-    // int real = -1;
-    // int rear = -1;
-    // // cout << pos << endl;
-    // for (int i = 1; i <= 100; i++) {
-    //     if (pos[i] == 2){ 
-    //         ans++;
-    //         if (real == -1) {
-    //             real = i;
-    //         }
-    //         rear = i;
-    //     }
-    // }
-    // ans--;
-    // // cout << real << " " << rear << endl;
-    // if (min(min(l, r), min(L, R)) < real) ans++;
-    // if (max(max(l, r), max(L, R)) > rear) ans++;
-    
-    // cout << ans << endl;

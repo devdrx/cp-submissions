@@ -18,11 +18,10 @@
 #define bin(x,y)  bitset<y>(x) 
 using namespace std;
 int MOD=1e9+7;      // Hardcoded, directly change from here for functions!
-
+ 
 const int MX_SZ=1e5+5;
-int par[MX_SZ];
-
-
+ 
+ 
 void modadd(int &a , int b) {a=((a%MOD)+(b%MOD))%MOD;}
 void modsub(int &a , int b) {a=((a%MOD)-(b%MOD)+MOD)%MOD;}
 void modmul(int &a , int b) {a=((a%MOD)*(b%MOD))%MOD;}
@@ -33,7 +32,7 @@ template<typename typC,typename typD> ostream &operator<<(ostream &cout,const pa
 template<typename typC,typename typD> ostream &operator<<(ostream &cout,const vector<pair<typC,typD>> &a) { for (auto &x:a) cout<<x<<'\n'; return cout; }
 template<typename typC> ostream &operator<<(ostream &cout,const vector<typC> &a) { int n=a.size(); if (!n) return cout; cout<<a[0]; for (int i=1; i<n; i++) cout<<' '<<a[i]; return cout; }
 // ===================================END Of the input module ==========================================
-
+ 
 /// ====================================PRIME utility ==================================================
 int sz=1e6+5;
 bool PrimeSieve[1000005];   // 1e6+5
@@ -55,43 +54,43 @@ bool isPrime(int n){
     }
     return 1;
 }
-
+ 
 /// ====================================PRIME utility ENDS here==================================================
-
+ 
 // ========================================MATH UTIL BEGINS==============================================
 //==================================== compute higher powers with mod ===================================
 uint power(int x, int y, int p =  MOD)
 {
     unsigned long long res = 1;
-
+ 
     x = x % p;
     while (y > 0)
     {
-
+ 
         if (y & 1)
             res = (res * x) % p;
-
+ 
         y = y >> 1;
         x = (x * x) % p;
     }
     return res;
 }
-
+ 
 // =============================================================================================================
-
+ 
 uint modInverse(int n, int p=MOD)       // using fermats little thm. [p needs to be prime which is mostly the case as mod value generally is 1e9+7]
 {
     return power(n, p - 2, p);
 }
 // can also derive this using extended euclidean... however this has a much simpler code....
-
-
+ 
+ 
 // =========================================Used to calculate nCr of higher values ===================================
 uint nCr(int n, int r, int p=MOD)     // faster calculation.. 
 {
     if (n < r)
         return 0;
-
+ 
     if (r == 0)
         return 1;
         
@@ -99,109 +98,85 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
     fac[0] = 1;
     for (int i = 1; i <= n; i++)
         fac[i] = (fac[i - 1] * i) % p;
-
+ 
     return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
 }
 // ==================================== MATH UTIL ENDS=======================================================//
+int n,m;
+int st=-1, ed=-1;
+vector<vi> g;
+vector<bool> vis;
+vector<int> parent;
 
-
-void solve(){
-    int l,r;
-    cin >> l >> r;
-    int L,R;
-    cin >> L >> R;
-    
-    //calculate intersection
-    int intl = max(l,L);
-    int intr = min(r,R);
-    if(intl > intr){
-        cout << 1; nl;
-        return;
-    }
-    else{
-        if(l == L and r==R){
-            cout << R-L; nl;
-            return;
-        }
-        else if(l == L){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else if(r == R){
-            cout << intr-intl+1; nl;
-            return;
+bool dfs(int node, int par){
+    vis[node] = true;
+    for(int v : g[node]){
+        if(v == par) continue;
+        if(vis[v]){
+            //cycle found
+            st = v;
+            ed = node; //jis node pe mila wahi end hai, parent retrace krte jao, u will get start
+            return true;
         }
         else{
-            cout << intr-intl+2; nl;
-            return;
+            parent[v] = node;
+            if(dfs(v, node)) return true;
+        }
+    }
+    return false;
+}
+
+void solve(){
+    cin >> n >> m;
+    g.clear(); g.resize(n+1);
+    vis.clear(); vis.resize(n+1);
+    parent.clear(); parent.resize(n+1);
+    st = -1, ed = -1;
+
+    fr(i,m){
+        int u,v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+
+    for(int i = 1; i <= n; i++){
+        if(!vis[i]){
+            parent[i] = -1; // mark root's parent
+            if(dfs(i, -1)) break;
         }
     }
 
-
-
-
-    //noum
-    //i{}el{}ord
-    //cCas
-    //tleopt
-
+    if(st == -1){
+        cout << "IMPOSSIBLE";
+    }
+    else{
+        vector<int> path;
+        path.push_back(st);
+        for(int i = ed; i != st; i = parent[i]){
+            path.push_back(i);
+        }
+        path.push_back(st);
+        reverse(path.begin(), path.end());
+        cout << path.size() << '\n';
+        for(auto x : path){
+            cout << x << ' ';
+        }
+    }
 }
 
+ 
 int32_t main()
 {
  
  ios_base::sync_with_stdio(false);
  cin.tie(NULL);
-
+ 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
     {
         solve();
     }
     return 0;
 }
-
-    // int l, r, L, R;
-    // int ans = 0;
-    // vi pos(101, 0);
-    // cin >> l >> r >> L >> R;
-    
-    // //if no intersection
-    // if (L > r || l > R) {
-    //     cout << 1 << endl;
-    //     return;
-    // }
-    
-    // if (L < l) {
-    //     swap(l, L);
-    //     swap(r, R);
-    // }
-    
-    
-    // for (int i = l; i <= r; i++) {
-    //     pos[i]++;
-    // }
-    
-    // for (int i = L; i <= R; i++) {
-    //     pos[i]++;
-    // }
-    
-    // int real = -1;
-    // int rear = -1;
-    // // cout << pos << endl;
-    // for (int i = 1; i <= 100; i++) {
-    //     if (pos[i] == 2){ 
-    //         ans++;
-    //         if (real == -1) {
-    //             real = i;
-    //         }
-    //         rear = i;
-    //     }
-    // }
-    // ans--;
-    // // cout << real << " " << rear << endl;
-    // if (min(min(l, r), min(L, R)) < real) ans++;
-    // if (max(max(l, r), max(L, R)) > rear) ans++;
-    
-    // cout << ans << endl;

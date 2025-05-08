@@ -106,45 +106,68 @@ uint nCr(int n, int r, int p=MOD)     // faster calculation..
 
 
 void solve(){
-    int l,r;
-    cin >> l >> r;
-    int L,R;
-    cin >> L >> R;
-    
-    //calculate intersection
-    int intl = max(l,L);
-    int intr = min(r,R);
-    if(intl > intr){
-        cout << 1; nl;
-        return;
-    }
-    else{
-        if(l == L and r==R){
-            cout << R-L; nl;
-            return;
-        }
-        else if(l == L){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else if(r == R){
-            cout << intr-intl+1; nl;
-            return;
-        }
-        else{
-            cout << intr-intl+2; nl;
-            return;
-        }
+    int a, b, c, d, e;
+    cin >> a >> b >> c >> d;
+
+    vector<vector<int>> g(a + 1);
+    for (int i = 0; i < d; ++i) {
+        int x, y;
+        cin >> x >> y;
+        g[x].push_back(y);
+        g[y].push_back(x);
     }
 
+    cin >> e;
+    vector<vector<int>> rg(a + 1);
+    for (int i = 0; i < e; ++i) {
+        int x, y;
+        cin >> x >> y;
+        rg[x].push_back(y);
+        rg[y].push_back(x);
+    }
 
+    vector<bool> hrc(a + 1, false);
+    for (int i = 1; i <= a; ++i) {
+        set<int> rn(rg[i].begin(), rg[i].end());
+        for (int j : g[i]) {
+            if (rn.count(j)) {
+                hrc[i] = true;
+                break;
+            }
+        }
+    }
 
+    const long long inf = LLONG_MAX;
+    vector<vector<long long>> md(a + 1, vector<long long>(a + 1, inf));
+    md[b][c] = 0;
 
-    //noum
-    //i{}el{}ord
-    //cCas
-    //tleopt
+    priority_queue<tuple<long long, int, int>, vector<tuple<long long, int, int>>, greater<>> mh;
+    mh.push({0, b, c});
 
+    long long sp = -1;
+
+    while (!mh.empty()) {
+        auto [cd, na, nb] = mh.top();
+        mh.pop();
+
+        if (cd != md[na][nb]) continue;
+        if (na == nb && hrc[na]) {
+            sp = cd;
+            break;
+        }
+
+        for (int nA : g[na]) {
+            for (int nB : rg[nb]) {
+                long long newDist = cd + abs(nA - nB);
+                if (newDist < md[nA][nB]) {
+                    md[nA][nB] = newDist;
+                    mh.push({newDist, nA, nB});
+                }
+            }
+        }
+    }
+
+    cout << sp << endl;
 }
 
 int32_t main()
@@ -162,46 +185,4 @@ int32_t main()
     return 0;
 }
 
-    // int l, r, L, R;
-    // int ans = 0;
-    // vi pos(101, 0);
-    // cin >> l >> r >> L >> R;
     
-    // //if no intersection
-    // if (L > r || l > R) {
-    //     cout << 1 << endl;
-    //     return;
-    // }
-    
-    // if (L < l) {
-    //     swap(l, L);
-    //     swap(r, R);
-    // }
-    
-    
-    // for (int i = l; i <= r; i++) {
-    //     pos[i]++;
-    // }
-    
-    // for (int i = L; i <= R; i++) {
-    //     pos[i]++;
-    // }
-    
-    // int real = -1;
-    // int rear = -1;
-    // // cout << pos << endl;
-    // for (int i = 1; i <= 100; i++) {
-    //     if (pos[i] == 2){ 
-    //         ans++;
-    //         if (real == -1) {
-    //             real = i;
-    //         }
-    //         rear = i;
-    //     }
-    // }
-    // ans--;
-    // // cout << real << " " << rear << endl;
-    // if (min(min(l, r), min(L, R)) < real) ans++;
-    // if (max(max(l, r), max(L, R)) > rear) ans++;
-    
-    // cout << ans << endl;
